@@ -1,4 +1,4 @@
-import React from 'react';
+import { motion } from 'framer-motion';
 import { Calendar, MapPin, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -7,43 +7,43 @@ const Experience = () => {
 
   const experiences = [
     {
-      title: 'Senior Full Stack Developer',
-      company: 'TechCorp Solutions',
-      location: 'Hồ Chí Minh',
-      period: '2022 - Hiện tại',
-      description: 'Phát triển và duy trì các ứng dụng web quy mô lớn phục vụ hơn 1 triệu người dùng.',
+      title: 'Junior Full Stack Developer',
+      company: 'Công ty ABC',
+      location: 'Thanh Hóa',
+      period: '2025 - Hiện tại',
+      description: 'Phát triển và bảo trì các ứng dụng web cho khách hàng doanh nghiệp.',
       achievements: [
-        'Thiết kế kiến trúc microservices giảm 40% thời gian response',
-        'Quản lý team 5 developers và triển khai DevOps pipeline',
-        'Tối ưu hóa database và cải thiện hiệu suất hệ thống 60%'
+        'Tham gia phát triển các tính năng mới cho hệ thống quản lý',
+        'Tối ưu hóa performance và fix bugs',
+        'Học hỏi và áp dụng best practices từ senior developers'
       ],
-      technologies: ['React', 'Node.js', 'AWS', 'Docker', 'PostgreSQL']
+      technologies: ['React', 'Node.js', 'MySQL', 'Git']
     },
     {
-      title: 'Full Stack Developer',
-      company: 'Digital Innovation Co.',
-      location: 'Hà Nội',
-      period: '2019 - 2022',
-      description: 'Phát triển các giải pháp e-commerce và ứng dụng quản lý doanh nghiệp.',
+      title: 'Intern Developer',
+      company: 'Công ty XYZ',
+      location: 'Thanh Hóa',
+      period: '2024 - 2025',
+      description: 'Thực tập và học hỏi quy trình phát triển phần mềm thực tế.',
       achievements: [
-        'Xây dựng platform e-commerce xử lý 10,000 đơn hàng/ngày',
-        'Tích hợp các hệ thống thanh toán và logistics',
-        'Phát triển mobile app với React Native'
+        'Hoàn thành các task được giao đúng deadline',
+        'Xây dựng các component UI theo design',
+        'Viết unit tests và documentation'
       ],
-      technologies: ['Vue.js', 'Laravel', 'MySQL', 'Redis', 'React Native']
+      technologies: ['JavaScript', 'React', 'CSS', 'Git']
     },
     {
-      title: 'Frontend Developer',
-      company: 'StartupTech',
-      location: 'Đà Nẵng',
-      period: '2017 - 2019',
-      description: 'Chuyên phát triển giao diện người dùng và trải nghiệm khách hàng.',
+      title: 'Freelancer',
+      company: 'Dự án cá nhân',
+      location: 'Remote',
+      period: '2023 - 2024',
+      description: 'Nhận và hoàn thành các dự án nhỏ cho khách hàng cá nhân.',
       achievements: [
-        'Tạo ra component library được sử dụng cho 15+ dự án',
-        'Cải thiện Core Web Vitals và SEO cho các website',
-        'Mentoring cho 3 junior developers'
+        'Xây dựng landing pages và website giới thiệu',
+        'Tạo các ứng dụng web đơn giản theo yêu cầu',
+        'Học cách giao tiếp và làm việc với khách hàng'
       ],
-      technologies: ['JavaScript', 'React', 'SASS', 'Webpack', 'Jest']
+      technologies: ['HTML', 'CSS', 'JavaScript', 'React']
     }
   ];
 
@@ -72,13 +72,13 @@ const Experience = () => {
               {/* Timeline Dot - Desktop */}
               <div className="absolute left-1/2 top-6 transform -translate-x-1/2 w-6 h-6 bg-sky-500 rounded-full border-4 border-white dark:border-gray-900 shadow-lg hidden lg:block z-10"></div>
               
-              <div className={`lg:w-5.4/12 bg-gray-50 dark:bg-gray-800 rounded-lg p-5 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${
+              <div className={`lg:w-5.4/12 bg-gray-50 dark:bg-gray-800 rounded-lg p-4 md:p-5 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${
                 index % 2 === 0 ? 'lg:ml-0 lg:mr-[51%]' : 'lg:ml-[51%] lg:mr-0'
-              } ml-16 lg:ml-0`}>
-                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-4">
+              } ml-14 md:ml-16 lg:ml-0`}>
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-3 md:mb-4">
                   <div>
-                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">{exp.title}</h3>
-                    <h4 className="text-xl text-sky-600 font-semibold">{exp.company}</h4>
+                    <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-1">{exp.title}</h3>
+                    <h4 className="text-lg md:text-xl text-sky-600 font-semibold">{exp.company}</h4>
                   </div>
                   <div className="flex flex-col lg:items-end mt-2 lg:mt-0">
                     <div className="flex items-center text-gray-600 dark:text-gray-300 mb-1">

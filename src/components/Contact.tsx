@@ -42,7 +42,7 @@ const Contact = () => {
     {
       icon: MapPin,
       title: 'Địa chỉ',
-      value: 'Quận 1, TP. Hồ Chí Minh',
+      value: 'Thanh Hóa, Việt Nam',
       link: '#'
     },
     {
@@ -123,7 +123,7 @@ const Contact = () => {
               <ul className="space-y-2 text-gray-700 dark:text-gray-300">
                 <li className="flex items-center">
                   <CheckCircle size={16} className="text-sky-500 mr-2" />
-                  8+ năm kinh nghiệm thực tế
+                  Đam mê học hỏi và phát triển
                 </li>
                 <li className="flex items-center">
                   <CheckCircle size={16} className="text-sky-500 mr-2" />
@@ -131,11 +131,11 @@ const Contact = () => {
                 </li>
                 <li className="flex items-center">
                   <CheckCircle size={16} className="text-sky-500 mr-2" />
-                  Hỗ trợ 24/7 trong dự án
+                  Sẵn sàng nhận feedback và cải thiện
                 </li>
                 <li className="flex items-center">
                   <CheckCircle size={16} className="text-sky-500 mr-2" />
-                  Tư vấn công nghệ miễn phí
+                  Giá cả hợp lý, phù hợp sinh viên
                 </li>
               </ul>
             </div>

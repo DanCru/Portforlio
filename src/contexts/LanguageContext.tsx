@@ -20,18 +20,18 @@ const translations = {
     'nav.contact': 'Liên hệ',
     
     // Hero Section
-    'hero.title': 'Chuyên gia Công nghệ thông tin',
-    'hero.subtitle': 'Chuyên về phát triển phần mềm, kiến trúc hệ thống và công nghệ cloud. Với hơn 8 năm kinh nghiệm, tôi đã giúp nhiều doanh nghiệp chuyển đổi số thành công.',
+    'hero.title': 'Web Developer',
+    'hero.subtitle': 'Sinh viên năm 3 ngành Công nghệ thông tin, đam mê phát triển phần mềm và xây dựng sản phẩm thực tế. Vừa học vừa làm, không ngừng trau dồi kỹ năng qua các dự án thực chiến.',
     'hero.cta1': 'Khám phá thêm',
     'hero.cta2': 'Liên hệ ngay',
     
     // About Section
     'about.title': 'Giới thiệu bản thân',
     'about.name': 'Nguyễn Anh Đức',
-    'about.description1': 'Tôi là một chuyên gia công nghệ thông tin với niềm đam mê sáng tạo và giải quyết các thách thức phức tạp thông qua công nghệ. Với hơn 8 năm kinh nghiệm trong ngành, tôi đã tham gia phát triển nhiều hệ thống quy mô lớn và giúp các doanh nghiệp chuyển đổi số thành công.',
-    'about.description2': 'Chuyên môn của tôi tập trung vào phát triển ứng dụng web, kiến trúc microservices, và triển khai trên cloud. Tôi luôn theo đuổi những công nghệ mới nhất và áp dụng các best practices để đảm bảo chất lượng và hiệu suất cao nhất.',
+    'about.description1': 'Tôi là sinh viên năm 3 ngành Công nghệ thông tin với niềm đam mê mãnh liệt về lập trình và phát triển sản phẩm. Mặc dù còn trẻ nhưng tôi đã tích lũy được kinh nghiệm thực tế thông qua vừa học vừa làm.',
+    'about.description2': 'Chuyên môn của tôi tập trung vào phát triển web với React, Node.js và các công nghệ hiện đại. Tôi luôn học hỏi và áp dụng những kiến thức mới vào các dự án thực tế.',
     'about.goal.title': 'Mục tiêu nghề nghiệp',
-    'about.goal.description': 'Trở thành Solution Architect hàng đầu, đóng góp vào việc xây dựng các hệ thống công nghệ tiên tiến và giúp các doanh nghiệp Việt Nam nâng cao năng lực số hóa.',
+    'about.goal.description': 'Trở thành Full Stack Developer chuyên nghiệp, đóng góp vào các dự án có ý nghĩa và không ngừng phát triển bản thân trong lĩnh vực công nghệ.',
     
     // Experience
     'experience.title': 'Kinh nghiệm làm việc',
@@ -67,18 +67,18 @@ const translations = {
     'nav.contact': 'Contact',
     
     // Hero Section
-    'hero.title': 'IT Technology Expert',
-    'hero.subtitle': 'Specialized in software development, system architecture and cloud technology. With over 8 years of experience, I have helped many businesses successfully transform digitally.',
+    'hero.title': 'Web Developer',
+    'hero.subtitle': '3rd year IT student passionate about software development and building real products. Learning while working, constantly improving skills through hands-on projects.',
     'hero.cta1': 'Explore More',
     'hero.cta2': 'Contact Now',
     
     // About Section
     'about.title': 'About Me',
     'about.name': 'Nguyen Anh Duc',
-    'about.description1': 'I am an IT expert with a passion for creativity and solving complex challenges through technology. With over 8 years of industry experience, I have participated in developing many large-scale systems and helped businesses successfully transform digitally.',
-    'about.description2': 'My expertise focuses on web application development, microservices architecture, and cloud deployment. I always pursue the latest technologies and apply best practices to ensure the highest quality and performance.',
+    'about.description1': 'I am a 3rd year IT student with a strong passion for programming and product development. Although young, I have gained practical experience through working while studying.',
+    'about.description2': 'My expertise focuses on web development with React, Node.js and modern technologies. I am always learning and applying new knowledge to real projects.',
     'about.goal.title': 'Career Goals',
-    'about.goal.description': 'To become a leading Solution Architect, contributing to building advanced technology systems and helping Vietnamese businesses enhance their digital capabilities.',
+    'about.goal.description': 'To become a professional Full Stack Developer, contribute to meaningful projects and continuously grow in the technology field.',
     
     // Experience
     'experience.title': 'Work Experience',

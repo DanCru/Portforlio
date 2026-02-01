@@ -1,103 +1,103 @@
-import React from 'react';
+import { motion } from 'framer-motion';
 import { ExternalLink, Github, Play, Users, Calendar, Code } from 'lucide-react';
 
 const Projects = () => {
   const projects = [
     {
-      title: 'E-Commerce Platform',
-      category: 'Full Stack Development',
-      description: 'Nền tảng thương mại điện tử hoàn chỉnh với microservices architecture, xử lý hàng nghìn giao dịch mỗi ngày.',
-      longDescription: 'Hệ thống bao gồm: Frontend React/Next.js, Backend Node.js với Express, Database PostgreSQL và Redis, Payment gateway tích hợp, Admin dashboard, Mobile app React Native.',
+      title: 'Portfolio Website',
+      category: 'Personal Project',
+      description: 'Website portfolio cá nhân được xây dựng với React và TypeScript, tích hợp dark mode và đa ngôn ngữ.',
+      longDescription: 'Dự án showcase kỹ năng frontend với responsive design, animations mượt mà, và SEO optimization.',
       image: 'https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=800',
-      technologies: ['React', 'Node.js', 'PostgreSQL', 'Redis', 'AWS', 'Docker'],
+      technologies: ['React', 'TypeScript', 'TailwindCSS', 'Vite'],
       features: [
-        'Xử lý 10,000+ đơn hàng/ngày',
-        'Tích hợp 5+ payment gateway',
-        'Real-time inventory management',
-        'Advanced analytics dashboard'
+        'Dark/Light mode toggle',
+        'Đa ngôn ngữ (VI/EN)',
+        'Responsive design',
+        'Smooth animations'
       ],
       metrics: {
-        users: '50K+',
-        uptime: '99.9%',
-        performance: '2s load time'
+        pages: '6+',
+        performance: '90+ Lighthouse',
+        responsive: '100%'
       },
-      duration: '8 tháng',
-      team: '6 người',
+      duration: '2 tuần',
+      team: '1 người',
       demoUrl: '#',
       githubUrl: '#',
-      status: 'Production'
+      status: 'Live'
     },
     {
-      title: 'Healthcare Management System',
-      category: 'Enterprise Solution',
-      description: 'Hệ thống quản lý bệnh viện tích hợp AI để hỗ trợ chẩn đoán và quản lý hồ sơ bệnh án điện tử.',
-      longDescription: 'Giải pháp toàn diện cho bệnh viện bao gồm: Quản lý bệnh nhân, Lịch hẹn khám, Hồ sơ điện tử, Tích hợp máy móc y tế, AI assistant cho bác sĩ.',
+      title: 'Task Management App',
+      category: 'Full Stack Project',
+      description: 'Ứng dụng quản lý công việc với đầy đủ tính năng CRUD, authentication và real-time updates.',
+      longDescription: 'Dự án học tập để practice full stack development với React frontend và Node.js backend.',
       image: 'https://images.pexels.com/photos/3786126/pexels-photo-3786126.jpeg?auto=compress&cs=tinysrgb&w=800',
-      technologies: ['Vue.js', 'Python', 'Django', 'PostgreSQL', 'TensorFlow', 'Docker'],
+      technologies: ['React', 'Node.js', 'Express', 'MongoDB'],
       features: [
-        'AI-powered diagnosis support',
-        'Electronic health records',
-        'Appointment scheduling system',
-        'Equipment integration'
+        'User authentication',
+        'Create, Read, Update, Delete tasks',
+        'Filter và search',
+        'Responsive UI'
       ],
       metrics: {
-        users: '1K+',
-        uptime: '99.8%',
-        performance: '1.5s load time'
+        features: '10+',
+        apis: '8',
+        tests: '20+'
       },
-      duration: '12 tháng',
-      team: '8 người',
+      duration: '1 tháng',
+      team: '1 người',
       demoUrl: '#',
       githubUrl: '#',
-      status: 'Production'
+      status: 'Completed'
     },
     {
-      title: 'Real-time Analytics Dashboard',
-      category: 'Data Visualization',
-      description: 'Dashboard phân tích dữ liệu real-time với khả năng xử lý hàng triệu data points, visualization tương tác và alerting system.',
-      longDescription: 'Hệ thống dashboard cho phép: Real-time data streaming, Interactive charts và graphs, Custom alerts và notifications, Data export và reporting, Multi-tenant architecture.',
+      title: 'E-commerce Landing Page',
+      category: 'Freelance Project',
+      description: 'Landing page cho cửa hàng online với thiết kế hiện đại và tối ưu conversion.',
+      longDescription: 'Dự án freelance đầu tiên, làm việc trực tiếp với khách hàng để hiểu yêu cầu và deliver sản phẩm.',
       image: 'https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=800',
-      technologies: ['React', 'D3.js', 'WebSocket', 'InfluxDB', 'Grafana', 'Kubernetes'],
+      technologies: ['HTML', 'CSS', 'JavaScript', 'Bootstrap'],
       features: [
-        'Real-time data streaming',
-        'Interactive visualizations',
-        'Custom alert system',
-        'Multi-tenant support'
+        'Product showcase',
+        'Contact form',
+        'Mobile-first design',
+        'SEO optimized'
       ],
       metrics: {
-        users: '500+',
-        uptime: '99.9%',
-        performance: '500ms response'
+        sections: '5',
+        loadTime: '2s',
+        mobile: '100%'
       },
-      duration: '6 tháng',
-      team: '4 người',
+      duration: '1 tuần',
+      team: '1 người',
       demoUrl: '#',
       githubUrl: '#',
-      status: 'Production'
+      status: 'Delivered'
     },
     {
-      title: 'Mobile Learning App',
-      category: 'Mobile Development',
-      description: 'Ứng dụng học tập trên di động với AI personalization, offline learning và gamification elements.',
-      longDescription: 'App học tập bao gồm: Personalized learning paths, Offline content access, Gamification system, Progress tracking, Social learning features, AR/VR integration.',
+      title: 'Weather App',
+      category: 'Learning Project',
+      description: 'Ứng dụng tra cứu thời tiết với API integration và clean UI design.',
+      longDescription: 'Dự án học tập để hiểu cách làm việc với APIs và xử lý dữ liệu bất đồng bộ.',
       image: 'https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg?auto=compress&cs=tinysrgb&w=800',
-      technologies: ['React Native', 'Firebase', 'TensorFlow Lite', 'MongoDB', 'WebRTC'],
+      technologies: ['React', 'OpenWeather API', 'CSS Modules'],
       features: [
-        'AI-powered personalization',
-        'Offline learning mode',
-        'Gamification system',
-        'Social learning features'
+        'Tìm kiếm thành phố',
+        'Hiển thị thời tiết real-time',
+        'Dự báo 5 ngày',
+        'Responsive design'
       ],
       metrics: {
-        users: '25K+',
-        rating: '4.8/5',
-        retention: '75%'
+        cities: 'Unlimited',
+        apiCalls: 'Real-time',
+        accuracy: '100%'
       },
-      duration: '10 tháng',
-      team: '5 người',
+      duration: '1 tuần',
+      team: '1 người',
       demoUrl: '#',
       githubUrl: '#',
-      status: 'Production'
+      status: 'Completed'
     }
   ];
 
@@ -124,7 +124,7 @@ const Projects = () => {
                   <img 
                     src={project.image} 
                     alt={project.title}
-                    className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="w-full h-48 md:h-64 lg:h-80 object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-blue-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <div className="flex space-x-4">
@@ -171,11 +171,11 @@ const Projects = () => {
                 </div>
 
                 {/* Metrics */}
-                <div className="grid grid-cols-3 gap-4 bg-white p-4 rounded-lg shadow">
+                <div className="grid grid-cols-3 gap-2 md:gap-4 bg-white dark:bg-gray-700 p-3 md:p-4 rounded-lg shadow">
                   {Object.entries(project.metrics).map(([key, value], mIndex) => (
                     <div key={mIndex} className="text-center">
-                      <div className="text-2xl font-bold text-sky-600">{value}</div>
-                      <div className="text-gray-600 text-sm capitalize">{key}</div>
+                      <div className="text-lg md:text-2xl font-bold text-sky-600">{value}</div>
+                      <div className="text-gray-600 dark:text-gray-300 text-xs md:text-sm capitalize">{key}</div>
                     </div>
                   ))}
                 </div>

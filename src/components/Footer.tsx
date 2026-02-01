@@ -1,9 +1,6 @@
-import React from 'react';
 import { Heart, ArrowUp } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
 
 const Footer = () => {
-  const { t } = useLanguage();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -47,8 +44,8 @@ const Footer = () => {
           <div className="lg:col-span-1">
             <h3 className="text-2xl font-bold mb-4">Nguyễn Anh Đức</h3>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              Chuyên gia IT với 8+ năm kinh nghiệm, chuyên về phát triển 
-              phần mềm và kiến trúc hệ thống hiện đại.
+              Sinh viên năm 3 ngành CNTT, đam mê phát triển web 
+              và xây dựng các sản phẩm có giá trị thực tế.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="bg-sky-500 hover:bg-sky-600 p-2 rounded transition-colors">

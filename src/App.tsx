@@ -1,4 +1,3 @@
-import React from 'react';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 import Header from './components/Header';
@@ -9,6 +8,7 @@ import Education from './components/Education';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import BackToTop from './components/BackToTop';
 
 function App() {
   return (
@@ -23,6 +23,7 @@ function App() {
           <Projects />
           <Contact />
           <Footer />
+          <BackToTop />
         </div>
       </LanguageProvider>
     </ThemeProvider>

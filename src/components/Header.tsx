@@ -1,17 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon, Globe } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useLanguage } from '../contexts/LanguageContext';
+import Logo from '../image/Logo.png';
 
 const Header = () => {
   const { theme, toggleTheme } = useTheme();
   const { language, toggleLanguage, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+      
+      // Scroll spy logic
+      const sections = ['home', 'experience', 'skills', 'education', 'projects', 'contact'];
+      const scrollPosition = window.scrollY + 100;
+      
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const top = element.offsetTop;
+          const height = element.offsetHeight;
+          
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -43,29 +62,39 @@ const Header = () => {
     }`}>
       <nav className="container mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
-          <div className={`text-2xl font-bold transition-colors duration-300 ${
-            isScrolled 
-              ? 'text-blue-900 dark:text-white' 
-              : 'text-white'
-          }`}>
-            Portfolio
+          {/* Logo */}
+          <div className="flex items-center">
+            <img 
+              src={Logo} 
+              alt="Đức.Dev Logo" 
+              className="h-10 w-10 rounded-full mr-2"
+            />
+            <span className={`text-xl font-bold transition-colors duration-300 ${isScrolled ? 'text-blue-900 dark:text-white' : 'text-white'}`}>
+              Đức<span className="text-sky-400">.</span>Dev
+            </span>
           </div>
 
           <div className="flex items-center space-x-4">
             {/* Desktop Menu */}
-            <ul className="hidden md:flex space-x-8">
+            <ul className="hidden md:flex space-x-6 lg:space-x-8">
               {menuItems.map((item) => (
-                <li key={item.id}>
+                <li key={item.id} className="relative">
                   <button
                     onClick={() => scrollToSection(item.id)}
-                    className={`transition-colors duration-300 hover:text-sky-500 ${
+                    className={`transition-colors duration-300 hover:text-sky-500 pb-1 ${
                       isScrolled 
                         ? 'text-gray-700 dark:text-gray-300' 
                         : 'text-white'
-                    }`}
+                    } ${activeSection === item.id ? 'text-sky-500 dark:text-sky-400' : ''}`}
                   >
                     {item.label}
                   </button>
+                  {/* Active indicator */}
+                  <span 
+                    className={`absolute bottom-0 left-0 h-0.5 bg-sky-500 transition-all duration-300 ${
+                      activeSection === item.id ? 'w-full' : 'w-0'
+                    }`}
+                  />
                 </li>
               ))}
             </ul>

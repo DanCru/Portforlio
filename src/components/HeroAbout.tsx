@@ -14,10 +14,10 @@ const HeroAbout = () => {
   };
 
   const highlights = [
-    { icon: Briefcase, title: '8+ Years Experience', desc: 'Professional Software Development' },
-    { icon: Users, title: '50+ Projects', desc: 'Successfully Completed' },
-    { icon: Award, title: '15+ Certifications', desc: 'Top-tier Technologies' },
-    { icon: Target, title: '100%', desc: 'Quality Commitment' },
+    { icon: Briefcase, title: '2+ Years', desc: 'Học tập & Làm việc thực tế' },
+    { icon: Users, title: '10+ Projects', desc: 'Đã hoàn thành' },
+    { icon: Award, title: 'Sinh viên IT', desc: 'Đang phát triển' },
+    { icon: Target, title: '100%', desc: 'Đam mê & Nỗ lực' },
   ];
 
   return (
@@ -128,9 +128,9 @@ const HeroAbout = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
             {/* Left: About Details */}
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
               <h3 className="text-3xl font-bold text-slate-900 dark:text-white">
                 {t('about.name')}
               </h3>
@@ -148,17 +148,17 @@ const HeroAbout = () => {
             </div>
 
             {/* Right: Highlights */}
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
               {highlights.map((item, index) => (
                 <div
                   key={index}
-                  className="p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center"
+                  className="p-4 md:p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center"
                 >
-                  <div className="bg-sky-500 w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <item.icon className="text-white" size={24} />
+                  <div className="bg-sky-500 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
+                    <item.icon className="text-white" size={20} />
                   </div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{item.title}</h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">{item.desc}</p>
+                  <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white mb-1 md:mb-2">{item.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-300 text-xs md:text-sm">{item.desc}</p>
                 </div>
               ))}
             </div>

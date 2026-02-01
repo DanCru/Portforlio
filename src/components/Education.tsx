@@ -7,91 +7,75 @@ const Education = () => {
 
   const education = [
     {
-      degree: 'Thạc sĩ Khoa học máy tính',
-      school: 'Đại học Bách Khoa TP.HCM',
-      year: '2015 - 2017',
-      gpa: '3.8/4.0',
-      description: 'Chuyên ngành: Kỹ thuật phần mềm và Trí tuệ nhân tạo',
+      degree: 'Cử nhân Công nghệ thông tin',
+      school: 'Đại học [Tên trường]',
+      year: '2024 - Hiện tại (Năm 3)',
+      gpa: '_/4.0',
+      description: 'Đang theo học chương trình Đại học, song song với công việc thực tế',
       image: 'https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=400'
     },
     {
-      degree: 'Cử nhân Công nghệ thông tin',
-      school: 'Đại học Quốc gia TP.HCM',
-      year: '2011 - 2015',
-      gpa: '3.6/4.0',
-      description: 'Tốt nghiệp loại Giỏi, top 10% khóa học',
+      degree: 'Cao đẳng Công nghệ thông tin',
+      school: 'FPT Polytechnic',
+      year: '2021 - 2024',
+      gpa: '_/4.0',
+      description: 'Tốt nghiệp với kiến thức nền tảng vững chắc về lập trình',
       image: 'https://images.pexels.com/photos/1205651/pexels-photo-1205651.jpeg?auto=compress&cs=tinysrgb&w=400'
     }
   ];
 
   const certifications = [
     {
-      name: 'AWS Certified Solutions Architect',
-      issuer: 'Amazon Web Services',
-      year: '2023',
-      level: 'Professional',
-      icon: '☁️',
+      name: 'JavaScript Algorithms & Data Structures',
+      issuer: 'freeCodeCamp',
+      year: '2024',
+      level: 'Certified',
+      icon: '📜',
       image: 'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=400'
     },
     {
-      name: 'Google Cloud Professional Developer',
-      issuer: 'Google Cloud',
-      year: '2022',
-      level: 'Professional',
-      icon: '🌐',
+      name: 'Responsive Web Design',
+      issuer: 'freeCodeCamp',
+      year: '2023',
+      level: 'Certified',
+      icon: '🎨',
       image: 'https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=400'
     },
     {
-      name: 'Certified Kubernetes Administrator',
-      issuer: 'Cloud Native Computing Foundation',
-      year: '2022',
-      level: 'Professional',
-      icon: '⚙️',
+      name: 'React - The Complete Guide',
+      issuer: 'Udemy',
+      year: '2024',
+      level: 'Completed',
+      icon: '⚛️',
       image: 'https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=400'
     },
     {
-      name: 'MongoDB Certified Developer',
-      issuer: 'MongoDB Inc.',
-      year: '2021',
-      level: 'Associate',
-      icon: '🍃',
-      image: 'https://images.pexels.com/photos/1181298/pexels-photo-1181298.jpeg?auto=compress&cs=tinysrgb&w=400'
-    },
-    {
-      name: 'React Developer Certification',
-      issuer: 'Meta',
+      name: 'Git & GitHub Bootcamp',
+      issuer: 'Udemy',
       year: '2023',
-      level: 'Professional',
-      icon: '⚛️',
-      image: 'https://images.pexels.com/photos/1181354/pexels-photo-1181354.jpeg?auto=compress&cs=tinysrgb&w=400'
-    },
-    {
-      name: 'Scrum Master Certified',
-      issuer: 'Scrum Alliance',
-      year: '2020',
-      level: 'Certified',
-      icon: '📋',
-      image: 'https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=400'
+      level: 'Completed',
+      icon: '🔀',
+      image: 'https://images.pexels.com/photos/1181298/pexels-photo-1181298.jpeg?auto=compress&cs=tinysrgb&w=400'
     }
   ];
 
   const achievements = [
     {
-      title: 'Giải Nhất Cuộc thi Hackathon Quốc gia',
-      year: '2023',
-      description: 'Ứng dụng AI cho giáo dục',
+      title: 'Hoàn thành dự án thực tế đầu tiên',
+      year: '2024',
+      description: 'Xây dựng website cho khách hàng thật',
       image: 'https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=400'
     },
     {
-      title: 'Top Speaker tại Tech Conference Vietnam',
-      year: '2022',
-      description: 'Chủ đề: Modern Web Architecture',
+      title: 'Tốt nghiệp FPT Polytechnic',
+      year: '2024',
+      description: 'Hoàn thành chương trình Cao đẳng CNTT',
       image: 'https://images.pexels.com/photos/1181622/pexels-photo-1181622.jpeg?auto=compress&cs=tinysrgb&w=400'
     },
     {
-      title: 'Giải Ba Olympic Tin học Sinh viên',
-      year: '2014',
-      description: 'Khu vực phía Nam',
+      title: 'Bắt đầu làm việc thực tế',
+      year: '2024',
+      description: 'Vừa học vừa làm, tích lũy kinh nghiệm',
       image: 'https://images.pexels.com/photos/1181715/pexels-photo-1181715.jpeg?auto=compress&cs=tinysrgb&w=400'
     }
   ];
@@ -115,31 +99,31 @@ const Education = () => {
           <div className="grid lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {education.map((edu, index) => (
               <div key={index} className="bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <div className="h-48 overflow-hidden">
+                <div className="h-36 md:h-48 overflow-hidden">
                   <img 
                     src={edu.image} 
                     alt={edu.school}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                   />
                 </div>
-                <div className="p-6">
-                  <div className="flex items-start mb-4">
-                    <div className="bg-sky-500 p-2 rounded-lg mr-4">
-                      <GraduationCap className="text-white" size={24} />
+                <div className="p-4 md:p-6">
+                  <div className="flex items-start mb-3 md:mb-4">
+                    <div className="bg-sky-500 p-2 rounded-lg mr-3 md:mr-4">
+                      <GraduationCap className="text-white" size={20} />
                     </div>
                     <div className="flex-1">
-                      <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-1">{edu.degree}</h4>
-                      <p className="text-sky-600 font-semibold">{edu.school}</p>
+                      <h4 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white mb-1">{edu.degree}</h4>
+                      <p className="text-sky-600 font-semibold text-sm md:text-base">{edu.school}</p>
                     </div>
                   </div>
-                  <div className="ml-14">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-gray-600 dark:text-gray-300">{edu.year}</span>
-                      <span className="bg-sky-100 dark:bg-sky-900 text-sky-800 dark:text-sky-200 px-3 py-1 rounded-full text-sm font-medium">
+                  <div className="ml-11 md:ml-14">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-2">
+                      <span className="text-gray-600 dark:text-gray-300 text-sm">{edu.year}</span>
+                      <span className="bg-sky-100 dark:bg-sky-900 text-sky-800 dark:text-sky-200 px-3 py-1 rounded-full text-xs md:text-sm font-medium w-fit">
                         GPA: {edu.gpa}
                       </span>
                     </div>
-                    <p className="text-gray-700 dark:text-gray-300">{edu.description}</p>
+                    <p className="text-gray-700 dark:text-gray-300 text-sm md:text-base">{edu.description}</p>
                   </div>
                 </div>
               </div>
