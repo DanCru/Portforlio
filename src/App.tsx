@@ -14,7 +14,8 @@ function App() {
   return (
     <ThemeProvider>
       <LanguageProvider>
-        <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+        <div className="min-h-screen bg-valorant-black bg-grid text-valorant-white font-sans selection:bg-valorant-red selection:text-white overflow-x-hidden">
+          <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,rgba(255,70,85,0.05),transparent_70%)]" />
           <Header />
           <HeroAbout />
           <Experience />

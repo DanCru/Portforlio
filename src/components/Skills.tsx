@@ -1,162 +1,116 @@
 import { motion } from 'framer-motion';
 import { useLanguage } from '../contexts/LanguageContext';
+import { Cpu, Server, Database, Cloud, Smartphone, Terminal } from 'lucide-react';
 
 const Skills = () => {
   const { t } = useLanguage();
 
   const skillCategories = [
     {
-      title: 'Frontend Development',
-      icon: '⚛️',
+      title: 'Frontend Protocol',
+      icon: Cpu,
       skills: [
-        { name: 'React/Next.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' },
-        { name: 'Vue.js/Nuxt.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg' },
-        { name: 'TypeScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg' },
-        { name: 'Tailwind CSS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-plain.svg' },
+        { name: 'React/Next.js', level: 90 },
+        { name: 'Vue.js/Nuxt.js', level: 85 },
+        { name: 'TypeScript', level: 88 },
+        { name: 'Tailwind CSS', level: 95 },
       ]
     },
     {
-      title: 'Backend Development',
-      icon: '🚀',
+      title: 'Backend Systems',
+      icon: Server,
       skills: [
-        { name: 'Node.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg' },
-        { name: 'Python/Django', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
-        { name: 'Laravel/PHP', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-plain.svg' },
-        { name: 'Express.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg' },
+        { name: 'Node.js', level: 85 },
+        { name: 'Python/Django', level: 70 },
+        { name: 'Laravel/PHP', level: 75 },
+        { name: 'Express.js', level: 85 },
       ]
     },
     {
-      title: 'Database & Storage',
-      icon: '🗄️',
+      title: 'Data Archives',
+      icon: Database,
       skills: [
-        { name: 'PostgreSQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg' },
-        { name: 'MongoDB', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg' },
-        { name: 'Redis', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg' },
-        { name: 'MySQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg' },
+        { name: 'PostgreSQL', level: 80 },
+        { name: 'MongoDB', level: 85 },
+        { name: 'Redis', level: 70 },
+        { name: 'MySQL', level: 85 },
       ]
     },
     {
-      title: 'Cloud & DevOps',
-      icon: '☁️',
+      title: 'Cloud Ops',
+      icon: Cloud,
       skills: [
-        { name: 'AWS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg' },
-        { name: 'Docker', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg' },
-        { name: 'Kubernetes', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg' },
-        { name: 'Azure', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg' },
+        { name: 'AWS', level: 70 },
+        { name: 'Docker', level: 80 },
+        { name: 'Kubernetes', level: 60 },
+        { name: 'CI/CD', level: 75 },
       ]
-    },
-    {
-      title: 'Mobile Development',
-      icon: '📱',
-      skills: [
-        { name: 'React Native', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' },
-        { name: 'Flutter', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg' },
-        { name: 'Swift', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg' },
-        { name: 'Kotlin', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-original.svg' },
-      ]
-    },
-    {
-      title: 'Programming Languages',
-      icon: '💻',
-      skills: [
-        { name: 'JavaScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
-        { name: 'Python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
-        { name: 'Java', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
-        { name: 'Go', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg' },
-      ]
-    },
+    }
   ];
 
   return (
-    <section id="skills" className="py-20 bg-gray-50 dark:bg-gray-800">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-            {t('skills.title')}
-          </h2>
-          <div className="w-24 h-1 bg-sky-500 mx-auto mb-4"></div>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            {t('skills.subtitle')}
-          </p>
+    <section id="skills" className="py-24 bg-valorant-black relative overflow-hidden">
+        {/* Decorative Grid */}
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-grid opacity-5" />
+
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="flex flex-col items-center mb-20">
+            <span className="font-mono text-valorant-red uppercase tracking-widest text-sm mb-2">// Arsenal</span>
+            <h2 className="text-4xl md:text-6xl font-display font-bold text-white uppercase tracking-tighter">
+                Technical <span className="text-stroke text-transparent">Loadout</span>
+            </h2>
         </div>
 
-        <motion.div 
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          variants={{
-            hidden: {},
-            visible: {
-              transition: {
-                staggerChildren: 0.15
-              }
-            }
-          }}
-        >
-          {skillCategories.map((category, categoryIndex) => (
-            <motion.div 
-              key={categoryIndex} 
-              className="bg-white dark:bg-gray-700 rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300"
-              variants={{
-                hidden: { opacity: 0, y: 30 },
-                visible: { 
-                  opacity: 1, 
-                  y: 0,
-                  transition: { duration: 0.5, ease: 'easeOut' }
-                }
-              }}
-              whileHover={{ y: -5, transition: { duration: 0.2 } }}
-            >
-              <div className="flex items-center mb-6">
-                <div className="bg-sky-500 p-3 rounded-lg mr-4 text-2xl">
-                  {category.icon}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {skillCategories.map((category, index) => (
+            //@ts-ignore - Framer motion generic types can be tricky
+            <div key={index} className="bg-valorant-dark border-t-2 border-valorant-red/0 hover:border-valorant-red transition-all duration-300 p-6 group relative">
+                <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+
+              <div className="flex items-center mb-8 pb-4 border-b border-white/10">
+                <div className="bg-white/5 p-3 rounded-sm mr-4 group-hover:bg-valorant-red/20 transition-colors">
+                  <category.icon size={24} className="text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white">{category.title}</h3>
+                <h3 className="text-xl font-display font-bold text-white uppercase tracking-wider">{category.title}</h3>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-6">
                 {category.skills.map((skill, skillIndex) => (
-                  <div key={skillIndex} className="flex flex-col items-center p-3 bg-gray-50 dark:bg-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-500 transition-colors duration-300">
-                    <div className="w-12 h-12 mb-2 flex items-center justify-center">
-                      <img 
-                        src={skill.icon} 
-                        alt={skill.name}
-                        className="w-10 h-10 object-contain"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                          const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                          if (fallback) fallback.style.display = 'block';
-                        }}
-                      />
-                      <div className="w-10 h-10 bg-sky-500 rounded-lg flex items-center justify-center text-white font-bold text-sm hidden">
-                        {skill.name.charAt(0)}
-                      </div>
+                  <div key={skillIndex}>
+                    <div className="flex justify-between mb-2">
+                        <span className="text-gray-400 font-mono text-xs uppercase tracking-wider">{skill.name}</span>
+                        <span className="text-valorant-red font-mono text-xs">{skill.level}%</span>
                     </div>
-                    <div className="text-center">
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-200 leading-tight">
-                        {skill.name}
-                      </span>
+                    {/* Progress Bar Valorant Style */}
+                    <div className="h-2 bg-white/5 skew-x-[-20deg] relative overflow-hidden">
+                        <motion.div 
+                             initial={{ width: 0 }}
+                             whileInView={{ width: `${skill.level}%` }}
+                             viewport={{ once: true }}
+                             transition={{ duration: 1, delay: index * 0.1 + skillIndex * 0.1 }}
+                             className="h-full bg-valorant-red"
+                        />
                     </div>
                   </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
 
-        {/* Additional Skills */}
-        <div className="mt-16 text-center">
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-8">Kỹ năng bổ sung</h3>
-          <div className="flex flex-wrap justify-center gap-4">
+        {/* Additional Skills Tags */}
+        <div className="mt-20 border-t border-white/10 pt-10 text-center">
+            <h3 className="text-xl font-display font-bold text-white uppercase tracking-widest mb-8">Secondary Abilities</h3>
+          <div className="flex flex-wrap justify-center gap-3">
             {[
-              'Agile/Scrum', 'Team Leadership', 'System Architecture', 'Performance Optimization',
-              'Security Best Practices', 'Code Review', 'Technical Writing', 'Problem Solving',
-              'Project Management', 'Client Communication'
+              'Agile/Scrum', 'System Architecture', 'Performance Optimization',
+              'Security Ops', 'Code Review Monitor', 'Problem Solving',
+              'Squad Leadership', 'Client Comms'
             ].map((skill, index) => (
               <span 
                 key={index}
-                className="bg-white dark:bg-gray-700 border border-sky-200 dark:border-sky-600 text-sky-700 dark:text-sky-300 px-4 py-2 rounded-full font-medium hover:bg-sky-50 dark:hover:bg-sky-900 transition-colors duration-300"
+                className="bg-transparent border border-white/20 text-gray-400 px-4 py-2 font-mono text-sm uppercase hover:bg-white hover:text-valorant-black hover:border-white transition-all duration-300 cursor-default"
               >
                 {skill}
               </span>

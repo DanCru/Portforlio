@@ -28,15 +28,15 @@ const BackToTop = () => {
   return (
     <button
       onClick={scrollToTop}
-      className={`fixed bottom-6 right-6 z-50 p-3 bg-sky-500 hover:bg-sky-600 text-white rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 ${
+      className={`fixed bottom-6 right-6 z-50 p-4 bg-valorant-red text-white shadow-lg transition-all duration-300 transform border border-white/20 clip-path-slant-left hover:bg-white hover:text-valorant-red group ${
         isVisible 
           ? 'opacity-100 translate-y-0' 
           : 'opacity-0 translate-y-10 pointer-events-none'
       }`}
       aria-label="Kéo lên đầu trang"
-      title="Kéo lên đầu trang"
+      title="Return to Base"
     >
-      <ArrowUp size={24} />
+      <ArrowUp size={24} className="group-hover:-translate-y-1 transition-transform" />
     </button>
   );
 };
