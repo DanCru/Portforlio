@@ -14,15 +14,20 @@ function App() {
   return (
     <ThemeProvider>
       <LanguageProvider>
-        <div className="min-h-screen bg-valorant-black bg-grid text-valorant-white font-sans selection:bg-valorant-red selection:text-white overflow-x-hidden">
-          <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,rgba(255,70,85,0.05),transparent_70%)]" />
+        <div className="min-h-screen transition-colors duration-300 bg-gray-50 text-slate-900 dark:bg-valorant-black dark:text-valorant-white font-sans selection:bg-valorant-red selection:text-white overflow-x-hidden">
+          <div className="fixed inset-0 pointer-events-none opacity-30 dark:opacity-100 bg-[radial-gradient(circle_at_50%_50%,rgba(255,70,85,0.05),transparent_70%)]" />
+          {/* Light Mode Grid */}
+          <div className="fixed inset-0 pointer-events-none opacity-40 dark:opacity-20 bg-grid-pattern" />
+          
           <Header />
-          <HeroAbout />
-          <Experience />
-          <Skills />
-          <Education />
-          <Projects />
-          <Contact />
+            <main>
+              <HeroAbout />
+              <Experience />
+              <Skills />
+              <Education />
+              <Projects />
+              <Contact />
+            </main>
           <Footer />
           <BackToTop />
         </div>

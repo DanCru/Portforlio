@@ -71,22 +71,54 @@
 }
 
 ::-webkit-scrollbar-track {
+  background: #f1f5f9; /* Slate 100 */
+}
+
+/* Dark mode overrides */
+.dark ::-webkit-scrollbar-track {
   background: #0f1923;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #ff4655;
+  background: #0ea5e9; /* Sky 500 */
   border-radius: 0;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background: #ff4655;
+}
+
 ::-webkit-scrollbar-thumb:hover {
+  background: #0284c7; /* Sky 600 */
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
   background: #d93d4b;
 }
 
-/* Selection */
+/* CSS Variables for Dynamic Theming */
+@layer base {
+  :root {
+    --selection-bg: #0ea5e9; /* Sky 500 */
+    --selection-text: #ffffff;
+  }
+
+  .dark {
+    --selection-bg: #ff4655; /* Valorant Red */
+    --selection-text: #ffffff;
+  }
+}
+
+/* Apply variables to selection */
 ::selection {
+  background-color: var(--selection-bg);
+  color: var(--selection-text);
+}
+
+/* Fallback for browsers that might support ::selection but have issues with vars inside it (rare but safer to be explicit if vars fail) */
+.dark ::selection {
   background-color: #ff4655;
-  color: #ece8e1;
+  color: #ffffff;
 }
 
 /* Geometric Background */
