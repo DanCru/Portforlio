@@ -1,51 +1,24 @@
 import { Calendar, MapPin } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import PortfolioService, { Experience as ExperienceType } from '../services/portfolio.service';
+import { useLanguage } from '../contexts/LanguageContext';
+import { getLocalized } from '../utils/languageUtils';
 
 const Experience = () => {
+  const [experiences, setExperiences] = useState<ExperienceType[]>([]);
+  const { language } = useLanguage();
 
-  const experiences = [
-    {
-      title: 'Junior Full Stack Developer',
-      company: 'Công ty ABC',
-      location: 'Thanh Hóa',
-      period: '2025 - PRESENT',
-      description: 'Phát triển và bảo trì các ứng dụng web cho khách hàng doanh nghiệp.',
-      achievements: [
-        'Tham gia phát triển các tính năng mới cho hệ thống quản lý',
-        'Tối ưu hóa performance và fix bugs',
-        'Học hỏi và áp dụng best practices từ senior developers'
-      ],
-      technologies: ['React', 'Node.js', 'MySQL', 'Git'],
-      rank: 'DIAMOND 1'
-    },
-    {
-      title: 'Intern Developer',
-      company: 'Công ty XYZ',
-      location: 'Thanh Hóa',
-      period: '2024 - 2025',
-      description: 'Thực tập và học hỏi quy trình phát triển phần mềm thực tế.',
-      achievements: [
-        'Hoàn thành các task được giao đúng deadline',
-        'Xây dựng các component UI theo design',
-        'Viết unit tests và documentation'
-      ],
-      technologies: ['JavaScript', 'React', 'CSS', 'Git'],
-      rank: 'GOLD 3'
-    },
-    {
-      title: 'Freelancer',
-      company: 'Dự án cá nhân',
-      location: 'Remote',
-      period: '2023 - 2024',
-      description: 'Nhận và hoàn thành các dự án nhỏ cho khách hàng cá nhân.',
-      achievements: [
-        'Xây dựng landing pages và website giới thiệu',
-        'Tạo các ứng dụng web đơn giản theo yêu cầu',
-        'Học cách giao tiếp và làm việc với khách hàng'
-      ],
-      technologies: ['HTML', 'CSS', 'JavaScript', 'React'],
-      rank: 'SILVER 2'
-    }
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await PortfolioService.getPublicData();
+        setExperiences(data.experiences);
+      } catch (error) {
+         console.error("Failed to fetch experiences", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <section id="experience" className="py-24 bg-white dark:bg-valorant-black relative overflow-hidden transition-colors duration-300">
@@ -77,32 +50,32 @@ const Experience = () => {
                 <div className="relative group/card">
                    {/* Rank Badge - Positioned outside the clipped container to avoid being cut off */}
                    <div className={`absolute -top-3 ${index % 2 === 0 ? 'md:right-4 left-4 md:left-auto' : 'left-4'} z-20 bg-sky-500 dark:bg-valorant-red text-white text-[10px] font-bold px-3 py-1 uppercase tracking-widest shadow-md transition-colors duration-300`}>
-                       LEVEL {3 - index}
+                       {exp.rank || `LEVEL ${3 - index}`}
                    </div>
 
                    {/* Main Content */}
                    <div className="relative bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 p-6 shadow-xl dark:shadow-none clip-path-slant-left hover:border-sky-300 dark:hover:border-valorant-red/50 transition-all duration-300">
                     
-                    <h3 className="text-2xl font-display font-bold text-slate-900 dark:text-white uppercase mb-1 mt-2">{exp.title}</h3>
-                    <h4 className="text-lg font-mono text-sky-600 dark:text-valorant-red mb-4 font-bold">{exp.company}</h4>
+                    <h3 className="text-2xl font-display font-bold text-slate-900 dark:text-white uppercase mb-1 mt-2">{getLocalized(exp.position, language)}</h3>
+                    <h4 className="text-lg font-mono text-sky-600 dark:text-valorant-red mb-4 font-bold">{getLocalized(exp.company, language)}</h4>
                     
                     <div className={`flex flex-col gap-2 mb-4 text-slate-500 dark:text-gray-400 text-sm font-mono ${index % 2 === 0 ? 'md:items-end' : ''}`}>
                          <div className="flex items-center gap-2">
                              <Calendar size={14} /> {exp.period}
                          </div>
                          <div className="flex items-center gap-2">
-                             <MapPin size={14} /> {exp.location}
+                             <MapPin size={14} /> {getLocalized(exp.location, language)}
                          </div>
                     </div>
 
                     <p className="text-slate-600 dark:text-gray-300 mb-6 font-sans leading-relaxed text-sm">
-                        {exp.description}
+                        {getLocalized(exp.description, language)}
                     </p>
 
                     <div className={`mb-4 ${index % 2 === 0 ? 'md:text-right' : ''}`}>
                         <h5 className="font-bold text-slate-800 dark:text-white uppercase text-xs tracking-widest mb-3 underline decoration-sky-400 dark:decoration-valorant-red underline-offset-4">// Key Achievements</h5>
                         <ul className="space-y-2">
-                            {exp.achievements.map((achievement, achIndex) => (
+                            {Array.isArray(exp.achievements) && exp.achievements.map((achievement, achIndex) => (
                             <li key={achIndex} className={`flex items-start text-sm text-slate-600 dark:text-gray-400 ${index % 2 === 0 ? 'md:justify-end md:text-right' : ''}`}>
                                 <span className="mr-2 text-sky-500 dark:text-valorant-red font-bold">{`>`}</span>
                                 {achievement}
@@ -113,7 +86,7 @@ const Experience = () => {
                     
                     {/* Tech Stack Pills - Light Mode Optimized */}
                     <div className={`flex flex-wrap gap-2 mt-4 ${index % 2 === 0 ? 'md:justify-end' : ''}`}>
-                        {exp.technologies.map((tech, i) => (
+                        {Array.isArray(exp.technologies) && exp.technologies.map((tech, i) => (
                             <span key={i} className="text-xs font-mono px-2 py-1 bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-gray-300 rounded-sm">
                                 {tech}
                             </span>

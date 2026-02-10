@@ -1,25 +1,26 @@
 import { Shield, Trophy } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import PortfolioService, { Education as EducationType, Certification } from '../services/portfolio.service';
+import { useLanguage } from '../contexts/LanguageContext';
+import { getLocalized } from '../utils/languageUtils';
 
 const Education = () => {
+  const [education, setEducation] = useState<EducationType[]>([]);
+  const [certifications, setCertifications] = useState<Certification[]>([]);
+  const { language } = useLanguage();
 
-  const education = [
-    {
-      degree: 'Bachelor of IT',
-      school: 'University [Name]',
-      year: '2024 - PRESENT',
-      gpa: 'IN PROGRESS',
-      description: 'Major in Software Engineering. Focused on scalable systems and algorithms.',
-      image: 'https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=400'
-    },
-    {
-      degree: 'Associate Degree',
-      school: 'FPT Polytechnic',
-      year: '2021 - 2024',
-      gpa: 'DISTINCTION',
-      description: 'Graduated with honors. Specialized in Web Development application.',
-      image: 'https://images.pexels.com/photos/1205651/pexels-photo-1205651.jpeg?auto=compress&cs=tinysrgb&w=400'
-    }
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await PortfolioService.getPublicData();
+        setEducation(data.educations);
+        setCertifications(data.certifications);
+      } catch (error) {
+        console.error("Failed to fetch education data", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <section id="education" className="py-24 bg-gray-50 dark:bg-valorant-black relative overflow-hidden transition-colors duration-300">
@@ -40,25 +41,27 @@ const Education = () => {
             {education.map((edu, index) => (
                 <div key={index} className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 p-1 group hover:border-sky-500 dark:hover:border-valorant-red/50 transition-colors overflow-hidden shadow-lg dark:shadow-none">
                     <div className="relative h-48 overflow-hidden mb-4">
-                        <img src={edu.image} alt={edu.school} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter dark:grayscale dark:group-hover:grayscale-0" />
+                        {edu.image && <img src={edu.image.startsWith('http') ? edu.image : `http://localhost:8000${edu.image}`} alt={getLocalized(edu.school, language)} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter dark:grayscale dark:group-hover:grayscale-0" />}
                         <div className="absolute inset-0 bg-transparent dark:bg-black/50 group-hover:bg-transparent transition-colors duration-300" />
                         <div className="absolute bottom-0 left-0 bg-sky-500 dark:bg-valorant-red text-white text-xs font-bold px-3 py-1 uppercase tracking-wider">
-                            {edu.year}
+                            {edu.period}
                         </div>
                     </div>
                     
                     <div className="p-4">
-                        <h3 className="text-2xl font-display font-bold text-slate-900 dark:text-white uppercase mb-1">{edu.degree}</h3>
-                        <p className="text-sky-600 dark:text-valorant-red font-mono text-sm mb-3 uppercase tracking-wider font-bold">{edu.school}</p>
+                        <h3 className="text-2xl font-display font-bold text-slate-900 dark:text-white uppercase mb-1">{getLocalized(edu.degree, language)}</h3>
+                        <p className="text-sky-600 dark:text-valorant-red font-mono text-sm mb-3 uppercase tracking-wider font-bold">{getLocalized(edu.school, language)}</p>
                         
-                        <div className="flex items-center gap-2 mb-4">
-                            <span className="text-xs bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-gray-300 px-2 py-0.5 border border-slate-200 dark:border-white/10 uppercase tracking-widest font-bold">
-                                GRADE: {edu.gpa}
-                            </span>
-                        </div>
+                        {edu.gpa && (
+                            <div className="flex items-center gap-2 mb-4">
+                                <span className="text-xs bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-gray-300 px-2 py-0.5 border border-slate-200 dark:border-white/10 uppercase tracking-widest font-bold">
+                                    GRADE: {edu.gpa}
+                                </span>
+                            </div>
+                        )}
                         
                         <p className="text-slate-600 dark:text-gray-400 text-sm leading-relaxed">
-                            {edu.description}
+                            {getLocalized(edu.description, language)}
                         </p>
                     </div>
                 </div>
@@ -73,15 +76,14 @@ const Education = () => {
             </div>
             
             <div className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
-                {[
-                    { name: 'JS Algorithms', issuer: 'freeCodeCamp' },
-                    { name: 'Responsive Web', issuer: 'freeCodeCamp' },
-                    { name: 'React Guide', issuer: 'Udemy' },
-                    { name: 'Git Bootcamp', issuer: 'Udemy' }
-                ].map((cert, idx) => (
+                {certifications.map((cert, idx) => (
                     <div key={idx} className="bg-white dark:bg-valorant-dark border border-slate-200 dark:border-white/10 px-6 py-4 hover:bg-slate-900 dark:hover:bg-white hover:text-white dark:hover:text-black hover:border-slate-900 dark:hover:border-white transition-all duration-300 cursor-default group clip-path-button shadow-sm">
-                        <div className="text-xs font-mono text-slate-500 dark:text-gray-500 group-hover:text-white/70 dark:group-hover:text-black/50 uppercase tracking-wider mb-1">{cert.issuer}</div>
-                        <div className="font-bold uppercase tracking-wide text-slate-900 dark:text-white group-hover:text-white dark:group-hover:text-black">{cert.name}</div>
+                        <div className="text-xs font-mono text-slate-500 dark:text-gray-500 group-hover:text-white/70 dark:group-hover:text-black/50 uppercase tracking-wider mb-1">{getLocalized(cert.issuer, language)}</div>
+                        <div className="font-bold uppercase tracking-wide text-slate-900 dark:text-white group-hover:text-white dark:group-hover:text-black">
+                            {cert.url ? (
+                                <a href={cert.url} target="_blank" rel="noopener noreferrer" className="hover:underline">{getLocalized(cert.name, language)}</a>
+                            ) : getLocalized(cert.name, language)}
+                        </div>
                     </div>
                 ))}
             </div>

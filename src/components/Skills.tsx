@@ -1,50 +1,66 @@
 import { motion } from 'framer-motion';
-import { Cpu, Server, Database, Cloud } from 'lucide-react';
+import { Cpu, Server, Database, Cloud, Code, Terminal, Layers } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import PortfolioService, { Skill } from '../services/portfolio.service';
+import { useLanguage } from '../contexts/LanguageContext';
+import { getLocalized } from '../utils/languageUtils';
 
 const Skills = () => {
+  const [skillCategories, setSkillCategories] = useState<{title: string, icon: any, skills: {name: string, level: number}[]}[]>([]);
+  const { language } = useLanguage();
 
-  const skillCategories = [
-    {
-      title: 'Frontend',
-      icon: Cpu,
-      skills: [
-        { name: 'React/Next.js', level: 90 },
-        { name: 'Vue.js/Nuxt.js', level: 85 },
-        { name: 'TypeScript', level: 88 },
-        { name: 'Tailwind CSS', level: 95 },
-      ]
-    },
-    {
-      title: 'Backend',
-      icon: Server,
-      skills: [
-        { name: 'Node.js', level: 85 },
-        { name: 'Python', level: 70 },
-        { name: 'Laravel/PHP', level: 75 },
-        { name: 'Express.js', level: 85 },
-      ]
-    },
-    {
-      title: 'Database',
-      icon: Database,
-      skills: [
-        { name: 'PostgreSQL', level: 80 },
-        { name: 'MongoDB', level: 85 },
-        { name: 'Redis', level: 70 },
-        { name: 'MySQL', level: 85 },
-      ]
-    },
-    {
-      title: 'DevOps/Cloud',
-      icon: Cloud,
-      skills: [
-        { name: 'AWS', level: 70 },
-        { name: 'Docker', level: 80 },
-        { name: 'Kubernetes', level: 60 },
-        { name: 'CI/CD', level: 75 },
-      ]
-    }
-  ];
+  const iconMap: {[key: string]: any} = {
+    'Frontend': Cpu,
+    'Backend': Server,
+    'Database': Database,
+    'DevOps/Cloud': Cloud,
+    'Tools': Terminal,
+    'Other': Code
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await PortfolioService.getPublicData();
+        const skillsData: {[key: string]: Skill[]} = data.skills;
+        
+        const mappedCategories = Object.keys(skillsData).map(category => ({
+            title: category, // Category keys usually come from DB group key, might be just string or JSON string if we grouped by JSON?
+            // Actually, backend grouping might be tricky if category is JSON. 
+            // The controller groups by 'category' column. If 'category' is JSON, it groups by the exact JSON string.
+            // So for now, we assume category is grouped by the unique string in DB. 
+            // IF we stored it as JSON, the key is the JSON string. We need to parse it to display.
+            icon: iconMap[category] || Layers,
+            skills: skillsData[category].map((s: Skill) => ({
+                name: s.name,
+                level: s.proficiency
+            }))
+        }));
+
+        // If category keys are JSON strings, we should parse them for display
+        const processedCategories = mappedCategories.map(cat => {
+            let displayTitle = cat.title;
+            try {
+                if (cat.title.startsWith('{')) {
+                     const parsed = JSON.parse(cat.title);
+                     displayTitle = getLocalized(parsed, language);
+                }
+            } catch (e) {
+                // Not JSON, keep as is
+            }
+            return {
+                ...cat,
+                title: displayTitle
+            };
+        });
+
+        setSkillCategories(processedCategories);
+      } catch (error) {
+        console.error("Failed to fetch skills", error);
+      }
+    };
+    fetchData();
+  }, [language]);
 
   return (
     <section id="skills" className="py-24 bg-gray-50 dark:bg-valorant-black relative overflow-hidden transition-colors duration-300">

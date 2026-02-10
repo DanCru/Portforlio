@@ -1,9 +1,31 @@
 import { ChevronDown, Crosshair, Zap, Shield, Hexagon } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
-import ProfileImage from '../image/image-profile3.jpg'; 
+import ProfileImage from '../image/image-profile4.jpg'; 
+import { useEffect, useState } from 'react';
+import PortfolioService from '../services/portfolio.service';
+import { getLocalized } from '../utils/languageUtils';
 
 const HeroAbout = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const [heroTitle, setHeroTitle] = useState('');
+  const [heroSubtitle, setHeroSubtitle] = useState('');
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await PortfolioService.getPublicData();
+        // Extract localized content based on current language
+        const titleData = data.settings.hero_title;
+        const subtitleData = data.settings.hero_subtitle;
+        
+        setHeroTitle(getLocalized(titleData, language) || t('hero.title'));
+        setHeroSubtitle(getLocalized(subtitleData, language) || t('hero.subtitle'));
+      } catch (error) {
+        console.error("Failed to fetch portfolio data", error);
+      }
+    };
+    fetchData();
+  }, [t, language]);
 
   const scrollToExperience = () => {
     const experienceSection = document.getElementById('experience');
@@ -47,15 +69,15 @@ const HeroAbout = () => {
             
             <h1 className="text-6xl md:text-8xl font-display font-bold uppercase leading-[0.9] tracking-tighter mb-6 text-slate-900 dark:text-white">
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-white/50 dark:text-stroke dark:hover:text-white transition-colors duration-300">
-                {t('hero.title').split(' ').slice(0, 1)}
+                {heroTitle.includes(' ') ? heroTitle.split(' ').slice(0, 1) : heroTitle}
               </span>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-600 to-indigo-600 dark:from-valorant-red dark:to-white">
-                {t('hero.title').split(' ').slice(1).join(' ')}
+                {heroTitle.includes(' ') ? heroTitle.split(' ').slice(1).join(' ') : ''}
               </span>
             </h1>
             
             <p className="text-xl md:text-2xl text-slate-600 dark:text-gray-400 font-sans max-w-xl mb-8 border-l-4 border-sky-500 dark:border-valorant-red pl-6">
-              {t('hero.subtitle')}
+              {heroSubtitle}
             </p>
 
             <div className="flex flex-wrap gap-4 mb-12">
