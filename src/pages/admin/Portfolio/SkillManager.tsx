@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PortfolioService, { Skill } from '../../../services/portfolio.service';
-import { Plus, Edit, Trash2, X } from 'lucide-react';
+import { Plus, Edit, Trash2, Upload, Image as ImageIcon } from 'lucide-react';
 import DualLanguageModal from '../../../components/admin/DualLanguageModal';
+
+const API_BASE = import.meta.env.VITE_BACKEND_URL || 'http://localhost:7745';
 
 const SkillManager = () => {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
-  const [editingItem, setEditingItem] = useState<Partial<Skill> | null>(null);
+  const [editingItem, setEditingItem] = useState<any>(null);
   const [saving, setSaving] = useState(false);
+  const [iconFile, setIconFile] = useState<File | null>(null);
+  const [iconPreview, setIconPreview] = useState<string>('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     loadData();
@@ -25,41 +30,52 @@ const SkillManager = () => {
   };
 
   const handleEdit = (item: Skill) => {
-    // Only category is potentially translatable here based on typical usage, 
-    // but name is usually universal (React, Laravel). 
-    // However, for full consistency, let's allow category translation.
-    // Name we will keep as string for now as it maps to icons/tech keys usually.
-    // Wait, the migration made all string columns nullable or text? 
-    // Let's check if we want to translate 'name'. 'React' is 'React'. 
-    // 'category' could be 'Frontend' (EN) / 'Giao diện' (VI).
-    
-    const normalize = (val: any) => typeof val === 'string' ? { vi: val, en: '' } : (val || { vi: '', en: '' });
-
+    const normalize = (val: any) => {
+        if (typeof val === 'string') {
+            try {
+                const parsed = JSON.parse(val);
+                return { vi: parsed.vi || '', en: parsed.en || '' };
+            } catch (e) {
+                return { vi: val, en: '' };
+            }
+        }
+        return val || { vi: '', en: '' };
+    };
     setEditingItem({
-        ...item,
-        // name: normalize(item.name), // Name usually doesn't need translation for tech skills
-        category: normalize(item.category), 
+      ...item,
+      category: normalize(item.category),
     });
+    setIconFile(null);
+    setIconPreview(item.icon_url ? (item.icon_url.startsWith('http') ? item.icon_url : `${API_BASE}${item.icon_url}`) : '');
   };
 
   const handleCreate = () => {
     setEditingItem({
-        name: '',
-        category: { vi: 'Frontend', en: 'Frontend' },
-        proficiency: 50,
-        icon: '',
-        sort_order: skills.length + 1,
-        is_active: true
+      name: '',
+      category: { vi: 'Frontend', en: 'Frontend' },
+      icon: '',
+      sort_order: skills.length + 1,
+      is_active: true,
     });
+    setIconFile(null);
+    setIconPreview('');
   };
 
-  const handeDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this item?')) return;
+  const handleDelete = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this skill?')) return;
     try {
-        await PortfolioService.deleteItem('skill', id);
-        loadData();
+      await PortfolioService.deleteItem('skill', id);
+      loadData();
     } catch (error) {
-        console.error('Failed to delete', error);
+      console.error('Failed to delete', error);
+    }
+  };
+
+  const handleIconChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setIconFile(file);
+      setIconPreview(URL.createObjectURL(file));
     }
   };
 
@@ -68,126 +84,183 @@ const SkillManager = () => {
     setSaving(true);
 
     try {
-        // Prepare payload - Skill is simpler, usually no image upload here yet (icon is string)
-         const payload = {
-            ...editingItem,
-            category: JSON.stringify(editingItem.category),
-        };
+      const formData = new FormData();
+      formData.append('name', editingItem.name || '');
+      formData.append('category', JSON.stringify(editingItem.category));
+      formData.append('icon', editingItem.icon || '');
+      formData.append('sort_order', String(editingItem.sort_order || 0));
+      formData.append('is_active', editingItem.is_active ? '1' : '0');
 
-        if (editingItem.id) {
-            await PortfolioService.updateItem('skill', editingItem.id, payload);
-        } else {
-            await PortfolioService.createItem('skill', payload);
-        }
-        setEditingItem(null);
-        loadData();
+      if (iconFile) {
+        formData.append('icon_url_file', iconFile);
+      }
+
+      if (editingItem.id) {
+        await PortfolioService.updateItem('skill', editingItem.id, formData);
+      } else {
+        await PortfolioService.createItem('skill', formData);
+      }
+      setEditingItem(null);
+      setIconFile(null);
+      setIconPreview('');
+      loadData();
     } catch (error) {
-        console.error('Failed to save', error);
-        alert('Failed to save changes');
+      console.error('Failed to save', error);
+      alert('Failed to save changes');
     } finally {
-        setSaving(false);
+      setSaving(false);
     }
   };
 
-  const handleLanguageChange = (field: keyof Skill, lang: 'vi' | 'en', value: string) => {
-      if (!editingItem) return;
-      // Special handling if we decide to translate name later, but for now only category
-      if (field === 'category') {
-          setEditingItem(prev => ({
-              ...prev!,
-              category: { ...((prev as any).category || { vi: '', en: '' }), [lang]: value }
-          }));
-      }
+  const handleLanguageChange = (field: string, lang: 'vi' | 'en', value: string) => {
+    if (!editingItem) return;
+    if (field === 'category') {
+      setEditingItem((prev: any) => ({
+        ...prev,
+        category: { ...(prev.category || { vi: '', en: '' }), [lang]: value }
+      }));
+    }
   };
 
-  if (loading) return <div>Loading...</div>;
+  const getIconUrl = (skill: Skill) => {
+    if (!skill.icon_url) return '';
+    return skill.icon_url.startsWith('http') ? skill.icon_url : `${API_BASE}${skill.icon_url}`;
+  };
 
-  // Helper to extract category string for grouping (use VI for grouping key or EN)
+  if (loading) return <div className="flex items-center justify-center p-12"><div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" /></div>;
+
   const getCatVal = (cat: any) => typeof cat === 'string' ? cat : (cat?.vi || cat?.en || 'Uncategorized');
   const categories = Array.from(new Set(skills.map(s => getCatVal(s.category)))).sort();
 
   return (
     <div className="max-w-6xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Manage Skills</h1>
-        <button onClick={handleCreate} className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            <Plus size={18} /> Add New
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-3xl font-bold">Manage Skills</h1>
+          <p className="text-gray-500 mt-1">{skills.length} skills across {categories.length} categories</p>
+        </div>
+        <button onClick={handleCreate} className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
+          <Plus size={18} /> Add Skill
         </button>
       </div>
 
-       <DualLanguageModal
+      <DualLanguageModal
         isOpen={!!editingItem}
-        onClose={() => setEditingItem(null)}
+        onClose={() => { setEditingItem(null); setIconFile(null); setIconPreview(''); }}
         title={editingItem?.id ? 'Edit Skill' : 'New Skill'}
         onSave={handleSave}
         isSaving={saving}
         size="md"
       >
         {editingItem && (
-            <div className="space-y-4">
-                <div>
-                    <label className="block text-sm font-medium mb-1">Name (Tech Name)</label>
-                    <input 
-                        required
-                        value={editingItem.name} 
-                        onChange={e => setEditingItem({...editingItem, name: e.target.value})}
-                        className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                        placeholder="e.g. React, Laravel"
-                    />
-                </div>
-
-                <DualLanguageModal.LocalizedInput
-                    label="Category"
-                    name="category"
-                    value={editingItem.category as any}
-                    onChange={(name, lang, val) => handleLanguageChange(name as any, lang, val)}
-                />
-                
-                <div>
-                    <label className="block text-sm font-medium mb-1">Proficiency ({editingItem.proficiency}%)</label>
-                    <input 
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={editingItem.proficiency} 
-                        onChange={e => setEditingItem({...editingItem, proficiency: Number(e.target.value)})}
-                        className="w-full"
-                    />
-                </div>
-                <div>
-                    <label className="block text-sm font-medium mb-1">Icon (Lucide Icon Name)</label>
-                    <input 
-                        value={editingItem.icon || ''} 
-                        onChange={e => setEditingItem({...editingItem, icon: e.target.value})}
-                        className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                        placeholder="e.g. Activity, Server, Code"
-                    />
-                </div>
+          <div className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium mb-1">Technology Name</label>
+              <input
+                required
+                value={editingItem.name}
+                onChange={e => setEditingItem({ ...editingItem, name: e.target.value })}
+                className="w-full p-2.5 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 outline-none"
+                placeholder="e.g. React, Laravel, Docker"
+              />
             </div>
+
+            <DualLanguageModal.LocalizedInput
+              label="Category"
+              name="category"
+              value={editingItem.category as any}
+              onChange={(name, lang, val) => handleLanguageChange(name as any, lang, val)}
+            />
+
+            {/* Icon Upload */}
+            <div>
+              <label className="block text-sm font-medium mb-2">Technology Icon</label>
+              <div className="flex items-center gap-4">
+                <div 
+                  className="w-20 h-20 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl flex items-center justify-center overflow-hidden cursor-pointer hover:border-blue-400 transition-colors bg-gray-50 dark:bg-gray-700"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  {iconPreview ? (
+                    <img src={iconPreview} alt="Icon" className="w-12 h-12 object-contain" />
+                  ) : (
+                    <ImageIcon size={24} className="text-gray-400" />
+                  )}
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="flex items-center gap-2 px-3 py-2 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
+                  >
+                    <Upload size={14} /> Upload Icon
+                  </button>
+                  <p className="text-xs text-gray-400 mt-1">PNG, SVG or WebP. Max 500KB.</p>
+                </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/png,image/svg+xml,image/webp,image/jpeg"
+                  onChange={handleIconChange}
+                  className="hidden"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <div className="flex-1">
+                <label className="block text-sm font-medium mb-1">Sort Order</label>
+                <input
+                  type="number"
+                  value={editingItem.sort_order || 0}
+                  onChange={e => setEditingItem({ ...editingItem, sort_order: Number(e.target.value) })}
+                  className="w-full p-2.5 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
+                />
+              </div>
+              <div className="flex items-center gap-2 pt-6">
+                <input
+                  type="checkbox"
+                  checked={editingItem.is_active}
+                  onChange={e => setEditingItem({ ...editingItem, is_active: e.target.checked })}
+                  className="w-4 h-4"
+                />
+                <label className="text-sm">Active</label>
+              </div>
+            </div>
+          </div>
         )}
       </DualLanguageModal>
 
       <div className="space-y-8">
         {categories.map(category => (
-            <div key={category}>
-                <h3 className="text-xl font-bold mb-4">{category}</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {skills.filter(s => getCatVal(s.category) === category).map(item => (
-                        <div key={item.id} className="bg-white dark:bg-gray-800 p-4 rounded shadow flex justify-between items-center group">
-                            <div>
-                                <h4 className="font-bold">{item.name}</h4>
-                                <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mt-2 w-32">
-                                    <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${item.proficiency}%` }}></div>
-                                </div>
-                            </div>
-                            <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button onClick={() => handleEdit(item)} className="p-2 text-blue-600 hover:bg-blue-50 rounded"><Edit size={18} /></button>
-                                <button onClick={() => handeDelete(item.id)} className="p-2 text-red-600 hover:bg-red-50 rounded"><Trash2 size={18} /></button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+          <div key={category} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm">
+            <div className="px-6 py-4 bg-gray-50 dark:bg-gray-750 border-b border-gray-200 dark:border-gray-700">
+              <h3 className="text-lg font-bold">{category}</h3>
+              <p className="text-sm text-gray-500">{skills.filter(s => getCatVal(s.category) === category).length} skills</p>
             </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 p-6">
+              {skills.filter(s => getCatVal(s.category) === category).map(item => (
+                <div key={item.id} className="flex flex-col items-center gap-2 p-4 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-800 transition-colors group relative">
+                  {/* Icon */}
+                  <div className="w-12 h-12 flex items-center justify-center">
+                    {item.icon_url ? (
+                      <img src={getIconUrl(item)} alt={item.name} className="w-10 h-10 object-contain" />
+                    ) : (
+                      <div className="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                        <span className="text-xs font-bold text-gray-400">{item.name.substring(0, 2)}</span>
+                      </div>
+                    )}
+                  </div>
+                  <span className="text-xs font-medium text-center text-gray-700 dark:text-gray-300">{item.name}</span>
+                  
+                  {/* Actions */}
+                  <div className="absolute top-1 right-1 flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button onClick={() => handleEdit(item)} className="p-1 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded text-xs"><Edit size={12} /></button>
+                    <button onClick={() => handleDelete(item.id)} className="p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded text-xs"><Trash2 size={12} /></button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
     </div>

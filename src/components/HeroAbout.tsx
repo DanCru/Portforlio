@@ -14,7 +14,6 @@ const HeroAbout = () => {
     const fetchData = async () => {
       try {
         const data = await PortfolioService.getPublicData();
-        // Extract localized content based on current language
         const titleData = data.settings.hero_title;
         const subtitleData = data.settings.hero_subtitle;
         
@@ -34,12 +33,55 @@ const HeroAbout = () => {
     }
   };
 
-  const highlights = [
-    { icon: Crosshair, title: '2+ Years', desc: 'COMBAT EXPERIENCE' },
-    { icon: Hexagon, title: '10+ Projects', desc: 'MISSIONS COMPLETED' },
-    { icon: Zap, title: 'Sinh viên IT', desc: 'LEVELING UP' },
-    { icon: Shield, title: '100%', desc: 'DEDICATION' },
-  ];
+  const [highlights, setHighlights] = useState([
+    { icon: Crosshair, title: t('hero.highlight.years'), desc: t('hero.highlight.yearsDesc') },
+    { icon: Hexagon, title: t('hero.highlight.projects'), desc: t('hero.highlight.projectsDesc') },
+    { icon: Zap, title: t('hero.highlight.student'), desc: t('hero.highlight.studentDesc') },
+    { icon: Shield, title: t('hero.highlight.dedication'), desc: t('hero.highlight.dedicationDesc') },
+  ]);
+
+  const defaultIcons = [Crosshair, Hexagon, Zap, Shield];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await PortfolioService.getPublicData();
+        const settings = data.settings;
+        
+        const titleData = settings.hero_title;
+        const subtitleData = settings.hero_subtitle;
+        
+        setHeroTitle(getLocalized(titleData, language) || t('hero.title'));
+        setHeroSubtitle(getLocalized(subtitleData, language) || t('hero.subtitle'));
+
+        // Load Core Values
+        const newHighlights = defaultIcons.map((Icon, index) => {
+            const num = index + 1;
+            const titleRaw = settings[`core_value_${num}_title`];
+            const descRaw = settings[`core_value_${num}_desc`];
+            
+            // Default to translation if setting not found
+            if (!titleRaw && !descRaw) {
+               if (index === 0) return { icon: Icon, title: t('hero.highlight.years'), desc: t('hero.highlight.yearsDesc') };
+               if (index === 1) return { icon: Icon, title: t('hero.highlight.projects'), desc: t('hero.highlight.projectsDesc') };
+               if (index === 2) return { icon: Icon, title: t('hero.highlight.student'), desc: t('hero.highlight.studentDesc') };
+               return { icon: Icon, title: t('hero.highlight.dedication'), desc: t('hero.highlight.dedicationDesc') };
+            }
+
+            return {
+                icon: Icon,
+                title: getLocalized(titleRaw, language),
+                desc: getLocalized(descRaw, language)
+            };
+        });
+        setHighlights(newHighlights);
+
+      } catch (error) {
+        console.error("Failed to fetch portfolio data", error);
+      }
+    };
+    fetchData();
+  }, [t, language]);
 
   return (
     <section id="home" className="relative min-h-screen flex flex-col bg-white dark:bg-valorant-black transition-colors duration-300">
@@ -63,7 +105,7 @@ const HeroAbout = () => {
           <div className="flex-1 w-full lg:w-1/2">
             <div className="mb-6 inline-block">
               <span className="font-mono text-sky-600 dark:text-valorant-red text-sm tracking-widest border border-sky-200 dark:border-valorant-red/30 px-3 py-1 rounded-sm uppercase bg-sky-50 dark:bg-transparent">
-                // System Initialized
+                {t('hero.systemInit')}
               </span>
             </div>
             
@@ -143,7 +185,7 @@ const HeroAbout = () => {
       
       {/* Scroll Indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce text-sky-600 dark:text-white">
-        <span className="font-mono text-[10px] uppercase tracking-widest">Scroll</span>
+        <span className="font-mono text-[10px] uppercase tracking-widest">{t('hero.scroll')}</span>
         <ChevronDown size={20} />
       </div>
     </section>

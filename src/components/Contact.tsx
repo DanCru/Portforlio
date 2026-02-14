@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, CheckCircle, Radio } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle, Radio, AlertCircle, Loader2 } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
+import api from '../lib/axios';
 
 const Contact = () => {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -9,6 +12,8 @@ const Contact = () => {
     message: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -17,31 +22,42 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    setTimeout(() => setIsSubmitted(false), 3000);
+    setIsSubmitting(true);
+    setError('');
+    
+    try {
+      await api.post('/contact', formData);
+      setIsSubmitted(true);
+      setFormData({ name: '', email: '', subject: '', message: '' });
+      setTimeout(() => setIsSubmitted(false), 5000);
+    } catch (err: any) {
+      setError(t('contact.error'));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
     {
       icon: Mail,
-      title: 'Email',
-      subtitle: 'Send a Mail',
+      title: t('contact.email'),
+      subtitle: t('contact.emailAction'),
       value: 'nguyenanhduc2909@gmail.com',
       link: 'mailto:nguyenanhduc2909@gmail.com'
     },
     {
       icon: Phone,
-      title: 'Phone',
-      subtitle: 'Call Me',
+      title: t('contact.phone'),
+      subtitle: t('contact.phoneAction'),
       value: '+84 901 234 567',
       link: 'tel:+84901234567'
     },
     {
       icon: MapPin,
-      title: 'Location',
-      subtitle: 'Based In',
+      title: t('contact.location'),
+      subtitle: t('contact.locationAction'),
       value: 'Thanh Hóa, Việt Nam',
       link: '#'
     }
@@ -55,9 +71,9 @@ const Contact = () => {
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col items-center mb-16">
-            <span className="font-mono text-sky-600 dark:text-valorant-red uppercase tracking-widest text-sm mb-2">// Connect</span>
+            <span className="font-mono text-sky-600 dark:text-valorant-red uppercase tracking-widest text-sm mb-2">{t('contact.sectionSubtitle')}</span>
             <h2 className="text-4xl md:text-6xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tighter">
-                Get In <span className="dark:text-stroke dark:text-transparent text-slate-900">Touch</span>
+                {t('contact.sectionTitle1')} <span className="dark:text-stroke dark:text-transparent text-slate-900">{t('contact.sectionTitle2')}</span>
             </h2>
         </div>
 
@@ -68,7 +84,7 @@ const Contact = () => {
                 <div className="absolute top-0 right-0 w-20 h-20 bg-sky-100 dark:bg-valorant-red/10 rounded-bl-full" />
                 <h3 className="text-xl font-display font-bold text-slate-900 dark:text-white mb-6 uppercase tracking-wider flex items-center gap-2">
                     <Radio className="text-sky-600 dark:text-valorant-red" size={24} />
-                    Contact Info
+                    {t('contact.info')}
                 </h3>
                 
                 <div className="space-y-6">
@@ -94,7 +110,7 @@ const Contact = () => {
 
             {/* Social Links */}
              <div className="bg-white dark:bg-valorant-dark border border-slate-200 dark:border-white/10 p-6 shadow-lg dark:shadow-none">
-                <h3 className="text-sm font-bold text-slate-500 dark:text-gray-400 mb-4 uppercase tracking-wider font-mono">// Social Profiles</h3>
+                <h3 className="text-sm font-bold text-slate-500 dark:text-gray-400 mb-4 uppercase tracking-wider font-mono">{t('contact.socialProfiles')}</h3>
                 <div className="flex gap-4">
                     {['LinkedIn', 'GitHub', 'Twitter', 'Facebook'].map((social, index) => (
                     <a
@@ -114,20 +130,27 @@ const Contact = () => {
             <div className="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-sky-500 dark:border-valorant-red" />
             <div className="absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-sky-500 dark:border-valorant-red" />
             
-            <h3 className="text-2xl font-display font-bold text-slate-900 dark:text-white mb-6 uppercase tracking-wider">Send Message</h3>
+            <h3 className="text-2xl font-display font-bold text-slate-900 dark:text-white mb-6 uppercase tracking-wider">{t('contact.sendMessage')}</h3>
             
             {isSubmitted ? (
               <div className="text-center py-12 border border-green-500/30 bg-green-500/10 rounded-sm">
                 <CheckCircle size={48} className="text-green-500 mx-auto mb-4" />
-                <h4 className="text-xl font-display font-bold text-slate-900 dark:text-white mb-2 uppercase tracking-wider">Message Sent</h4>
-                <p className="text-slate-600 dark:text-gray-400 font-mono text-sm">Thank you. I will reply shortly.</p>
+                <h4 className="text-xl font-display font-bold text-slate-900 dark:text-white mb-2 uppercase tracking-wider">{t('contact.sent')}</h4>
+                <p className="text-slate-600 dark:text-gray-400 font-mono text-sm">{t('contact.sentDesc')}</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
+                {error && (
+                  <div className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-sm text-red-600 dark:text-red-400 text-sm">
+                    <AlertCircle size={16} />
+                    {error}
+                  </div>
+                )}
+                
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-xs font-mono text-slate-500 dark:text-gray-500 uppercase tracking-widest mb-2">
-                       // Name
+                       {t('contact.formName')}
                     </label>
                     <input
                       type="text"
@@ -136,12 +159,12 @@ const Contact = () => {
                       value={formData.name}
                       onChange={handleChange}
                       className="w-full bg-white dark:bg-valorant-black border border-slate-300 dark:border-white/20 text-slate-900 dark:text-white px-4 py-3 focus:border-sky-500 dark:focus:border-valorant-red focus:outline-none transition-colors font-mono text-sm placeholder-gray-400 dark:placeholder-gray-600"
-                      placeholder="ENTER NAME"
+                      placeholder={t('contact.namePlaceholder')}
                     />
                   </div>
                   <div>
                     <label className="block text-xs font-mono text-slate-500 dark:text-gray-500 uppercase tracking-widest mb-2">
-                       // Email
+                       {t('contact.formEmail')}
                     </label>
                     <input
                       type="email"
@@ -150,14 +173,14 @@ const Contact = () => {
                       value={formData.email}
                       onChange={handleChange}
                       className="w-full bg-white dark:bg-valorant-black border border-slate-300 dark:border-white/20 text-slate-900 dark:text-white px-4 py-3 focus:border-sky-500 dark:focus:border-valorant-red focus:outline-none transition-colors font-mono text-sm placeholder-gray-400 dark:placeholder-gray-600"
-                      placeholder="ENTER EMAIL"
+                      placeholder={t('contact.emailPlaceholder')}
                     />
                   </div>
                 </div>
 
                 <div>
                    <label className="block text-xs font-mono text-slate-500 dark:text-gray-500 uppercase tracking-widest mb-2">
-                       // Subject
+                       {t('contact.formSubject')}
                     </label>
                   <select
                     name="subject"
@@ -166,16 +189,16 @@ const Contact = () => {
                     onChange={handleChange}
                     className="w-full bg-white dark:bg-valorant-black border border-slate-300 dark:border-white/20 text-slate-900 dark:text-white px-4 py-3 focus:border-sky-500 dark:focus:border-valorant-red focus:outline-none transition-colors font-mono text-sm"
                   >
-                    <option value="">SELECT SUBJECT</option>
-                    <option value="project">Project Collaboration</option>
-                    <option value="job">Recruitment / Job Opportunity</option>
-                    <option value="other">Other Inquiry</option>
+                    <option value="">{t('contact.selectSubject')}</option>
+                    <option value="project">{t('contact.subjectProject')}</option>
+                    <option value="job">{t('contact.subjectJob')}</option>
+                    <option value="other">{t('contact.subjectOther')}</option>
                   </select>
                 </div>
 
                 <div>
                    <label className="block text-xs font-mono text-slate-500 dark:text-gray-500 uppercase tracking-widest mb-2">
-                       // Message
+                       {t('contact.formMessage')}
                     </label>
                   <textarea
                     name="message"
@@ -184,16 +207,21 @@ const Contact = () => {
                     value={formData.message}
                     onChange={handleChange}
                     className="w-full bg-white dark:bg-valorant-black border border-slate-300 dark:border-white/20 text-slate-900 dark:text-white px-4 py-3 focus:border-sky-500 dark:focus:border-valorant-red focus:outline-none transition-colors resize-vertical font-mono text-sm placeholder-gray-400 dark:placeholder-gray-600"
-                    placeholder="ENTER MESSAGE..."
+                    placeholder={t('contact.messagePlaceholder')}
                   ></textarea>
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full bg-sky-500 dark:bg-valorant-red hover:bg-sky-600 dark:hover:bg-white hover:text-white dark:hover:text-valorant-black text-white py-4 font-display font-bold uppercase tracking-widest transition-all duration-300 clip-path-button relative overflow-hidden group shadow-lg"
+                  disabled={isSubmitting}
+                  className="w-full bg-sky-500 dark:bg-valorant-red hover:bg-sky-600 dark:hover:bg-white hover:text-white dark:hover:text-valorant-black text-white py-4 font-display font-bold uppercase tracking-widest transition-all duration-300 clip-path-button relative overflow-hidden group shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
-                    <Send size={18} /> Send Message
+                    {isSubmitting ? (
+                      <><Loader2 size={18} className="animate-spin" /> {t('contact.sending')}</>
+                    ) : (
+                      <><Send size={18} /> {t('contact.submit')}</>
+                    )}
                   </span>
                 </button>
               </form>

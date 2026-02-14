@@ -5,21 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Skill extends Model
+class ContactMessage extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
-        'category',
-        'proficiency',
-        'icon',
-        'icon_url',
-        'sort_order',
-        'is_active',
+        'email',
+        'subject',
+        'message',
+        'is_read',
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
+        'is_read' => 'boolean',
     ];
 }

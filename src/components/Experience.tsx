@@ -6,7 +6,7 @@ import { getLocalized } from '../utils/languageUtils';
 
 const Experience = () => {
   const [experiences, setExperiences] = useState<ExperienceType[]>([]);
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,9 +27,9 @@ const Experience = () => {
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col items-center mb-20">
-            <span className="font-mono text-sky-600 dark:text-valorant-red uppercase tracking-widest text-sm mb-2">// Career Path</span>
+            <span className="font-mono text-sky-600 dark:text-valorant-red uppercase tracking-widest text-sm mb-2">{t('experience.subtitle')}</span>
           <h2 className="text-4xl md:text-6xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tighter">
-             Active <span className="dark:text-stroke dark:text-transparent text-slate-900">Timeline</span>
+             {t('experience.sectionTitle1')} <span className="dark:text-stroke dark:text-transparent text-slate-900">{t('experience.sectionTitle2')}</span>
           </h2>
         </div>
 
@@ -54,7 +54,7 @@ const Experience = () => {
                    </div>
 
                    {/* Main Content */}
-                   <div className="relative bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 p-6 shadow-xl dark:shadow-none clip-path-slant-left hover:border-sky-300 dark:hover:border-valorant-red/50 transition-all duration-300">
+                   <div className="relative bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 p-6 pb-12 shadow-xl dark:shadow-none clip-path-slant-left hover:border-sky-300 dark:hover:border-valorant-red/50 transition-all duration-300">
                     
                     <h3 className="text-2xl font-display font-bold text-slate-900 dark:text-white uppercase mb-1 mt-2">{getLocalized(exp.position, language)}</h3>
                     <h4 className="text-lg font-mono text-sky-600 dark:text-valorant-red mb-4 font-bold">{getLocalized(exp.company, language)}</h4>
@@ -73,7 +73,7 @@ const Experience = () => {
                     </p>
 
                     <div className={`mb-4 ${index % 2 === 0 ? 'md:text-right' : ''}`}>
-                        <h5 className="font-bold text-slate-800 dark:text-white uppercase text-xs tracking-widest mb-3 underline decoration-sky-400 dark:decoration-valorant-red underline-offset-4">// Key Achievements</h5>
+                        <h5 className="font-bold text-slate-800 dark:text-white uppercase text-xs tracking-widest mb-3 underline decoration-sky-400 dark:decoration-valorant-red underline-offset-4">{t('experience.keyAchievements')}</h5>
                         <ul className="space-y-2">
                             {Array.isArray(exp.achievements) && exp.achievements.map((achievement, achIndex) => (
                             <li key={achIndex} className={`flex items-start text-sm text-slate-600 dark:text-gray-400 ${index % 2 === 0 ? 'md:justify-end md:text-right' : ''}`}>

@@ -26,7 +26,17 @@ const EducationManager = () => {
   };
 
   const handleEdit = (item: Education) => {
-    const normalize = (val: any) => typeof val === 'string' ? { vi: val, en: '' } : (val || { vi: '', en: '' });
+    const normalize = (val: any) => {
+        if (typeof val === 'string') {
+            try {
+                const parsed = JSON.parse(val);
+                return { vi: parsed.vi || '', en: parsed.en || '' };
+            } catch (e) {
+                return { vi: val, en: '' };
+            }
+        }
+        return val || { vi: '', en: '' };
+    };
     setEditingItem({
         ...item,
         degree: normalize(item.degree),
@@ -182,7 +192,10 @@ const EducationManager = () => {
       <div className="grid gap-4">
         {items.map(item => {
              const getVal = (val: any) => typeof val === 'string' ? val : (val?.vi || val?.en || '');
-             const imageUrl = item.image?.startsWith('http') || item.image?.startsWith('/') ? item.image : `http://localhost:7745${item.image}`;
+             const API_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:7745';
+             const imageUrl = item.image 
+                ? (item.image.startsWith('http') ? item.image : `${API_URL}${item.image}`)
+                : '';
 
              return (
                 <div key={item.id} className="bg-white dark:bg-gray-800 p-4 rounded shadow flex justify-between items-center group">

@@ -1,12 +1,16 @@
-import { ExternalLink, Github } from 'lucide-react';
+import { ExternalLink, Github, Eye } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PortfolioService, { Project } from '../services/portfolio.service';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getLocalized } from '../utils/languageUtils';
 
+const API_BASE = import.meta.env.VITE_BACKEND_URL || 'http://localhost:7745';
+
 const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,6 +24,19 @@ const Projects = () => {
     fetchData();
   }, []);
 
+  const getImageUrl = (image: string | undefined) => {
+    if (!image) return '';
+    return image.startsWith('http') ? image : `${API_BASE}${image}`;
+  };
+
+  const getProjectSlug = (project: Project) => {
+    const slug = project.slug;
+    if (typeof slug === 'object' && slug !== null) {
+      return (slug as any)[language] || (slug as any).en || (slug as any).vi || '';
+    }
+    return slug || '';
+  };
+
   return (
     <section id="projects" className="py-24 relative bg-gray-50 dark:bg-valorant-black overflow-hidden transition-colors duration-300">
       {/* Decorative background elements */}
@@ -28,9 +45,9 @@ const Projects = () => {
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col items-start mb-20 border-b border-slate-200 dark:border-white/10 pb-8">
-            <span className="font-mono text-sky-600 dark:text-valorant-red uppercase tracking-widest text-sm mb-2">// Selected Works</span>
+            <span className="font-mono text-sky-600 dark:text-valorant-red uppercase tracking-widest text-sm mb-2">{t('projects.sectionSubtitle')}</span>
             <h2 className="text-5xl md:text-7xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tighter">
-                Featured <span className="dark:text-stroke dark:text-transparent text-slate-900">Projects</span>
+                {t('projects.sectionTitle1')} <span className="dark:text-stroke dark:text-transparent text-slate-900">{t('projects.sectionTitle2')}</span>
             </h2>
         </div>
 
@@ -43,7 +60,7 @@ const Projects = () => {
                 <div className="h-full bg-white dark:bg-valorant-dark relative clip-path-slant-right overflow-hidden border border-slate-200 dark:border-white/10 group-hover:border-sky-500 dark:group-hover:border-valorant-red/50 transition-colors shadow-xl dark:shadow-none">
                     {project.image && (
                         <img 
-                            src={project.image.startsWith('http') ? project.image : `http://localhost:7745${project.image}`}
+                            src={getImageUrl(project.image)}
                             alt={getLocalized(project.title, language)}
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter brightness-95 dark:brightness-75 group-hover:brightness-100"
                         />
@@ -61,6 +78,12 @@ const Projects = () => {
 
                     {/* Hover Reveal Actions */}
                     <div className="absolute inset-0 bg-slate-900/40 dark:bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-6 backdrop-blur-sm">
+                        <button
+                          onClick={() => navigate(`/project/${getProjectSlug(project)}`)}
+                          className="p-4 bg-sky-500 dark:bg-valorant-red text-white hover:bg-white hover:text-sky-600 dark:hover:text-valorant-red transition-all transform hover:-translate-y-1 clip-path-button shadow-lg"
+                        >
+                            <Eye size={24} />
+                        </button>
                         {project.live_url && (
                              <a href={project.live_url} target="_blank" rel="noopener noreferrer" className="p-4 bg-sky-500 dark:bg-valorant-red text-white hover:bg-white hover:text-sky-600 dark:hover:text-valorant-red transition-all transform hover:-translate-y-1 clip-path-button shadow-lg">
                                 <ExternalLink size={24} />
@@ -100,24 +123,30 @@ const Projects = () => {
                   </div>
 
                   {/* Specs Grid */}
-                  <div className="bg-white dark:bg-white/5 p-6 border border-slate-200 dark:border-white/10 shadow-lg dark:shadow-none">
-                    <div className="grid grid-cols-2 gap-4 mb-6">
-                        {project.metrics && Object.entries(project.metrics).map(([key, value], idx) => (
-                            <div key={idx} className="flex flex-col">
-                                <span className="text-[10px] uppercase text-slate-400 dark:text-gray-500 font-mono tracking-wider">{key}</span>
-                                <span className="text-xl font-display font-bold text-slate-800 dark:text-white">{value}</span>
-                            </div>
-                        ))}
-                    </div>
+                  {(project.metrics && Object.keys(project.metrics).length > 0 || (project.tech_stack && project.tech_stack.length > 0)) && (
+                      <div className="bg-white dark:bg-white/5 p-6 border border-slate-200 dark:border-white/10 shadow-lg dark:shadow-none">
+                        {project.metrics && Object.keys(project.metrics).length > 0 && (
+                          <div className="grid grid-cols-2 gap-4 mb-6">
+                            {Object.entries(project.metrics).map(([key, value], idx) => (
+                                <div key={idx} className="flex flex-col">
+                                    <span className="text-[10px] uppercase text-slate-400 dark:text-gray-500 font-mono tracking-wider">{key}</span>
+                                    <span className="text-xl font-display font-bold text-slate-800 dark:text-white">{value}</span>
+                                </div>
+                            ))}
+                          </div>
+                        )}
 
-                    <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-100 dark:border-white/10">
-                        {project.tech_stack?.map((tech, idx) => (
-                            <span key={idx} className="text-xs font-mono uppercase px-2 py-1 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-gray-300 border border-slate-200 dark:border-white/10 rounded-sm">
-                                {tech}
-                            </span>
-                        ))}
-                    </div>
-                  </div>
+                        {project.tech_stack && project.tech_stack.length > 0 && (
+                            <div className={`flex flex-wrap gap-2 ${project.metrics && Object.keys(project.metrics).length > 0 ? 'pt-4 border-t border-slate-100 dark:border-white/10' : ''}`}>
+                                {(typeof project.tech_stack === 'string' ? JSON.parse(project.tech_stack) : project.tech_stack).map((tech: string, idx: number) => (
+                                    <span key={idx} className="text-xs font-mono uppercase px-2 py-1 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-gray-300 border border-slate-200 dark:border-white/10 rounded-sm">
+                                        {tech}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+                      </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -128,7 +157,7 @@ const Projects = () => {
         <div className="flex justify-center mt-24">
           <button className="group relative px-12 py-4 bg-transparent border border-slate-300 dark:border-white/20 text-slate-900 dark:text-white font-display font-bold uppercase tracking-widest hover:bg-slate-100 dark:hover:bg-white/5 transition-colors">
             <span className="relative z-10 flex items-center gap-2">
-                View All Projects <Github size={18} />
+                {t('projects.viewAll')} <Github size={18} />
             </span>
             <div className="absolute top-0 right-0 w-2 h-2 bg-sky-500 dark:bg-valorant-red" />
             <div className="absolute bottom-0 left-0 w-2 h-2 bg-sky-500 dark:bg-valorant-red" />

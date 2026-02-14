@@ -1,7 +1,9 @@
 import { ArrowUp, ShieldCheck, Terminal, Globe } from 'lucide-react';
 import Logo from '../image/Logo.png';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Footer = () => {
+  const { t } = useLanguage();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -26,8 +28,7 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-slate-600 dark:text-gray-400 max-w-md font-sans">
-              Building intuitive, scalable, and engaging web solutions. 
-              Always ready for the next challenge.
+              {t('footer.description')}
             </p>
             <div className="flex gap-4">
                 {['Github', 'LinkedIn', 'Twitter'].map((social) => (
@@ -40,12 +41,17 @@ const Footer = () => {
 
           {/* Links Column */}
           <div className="space-y-6">
-            <h4 className="font-display text-xl font-bold text-slate-900 dark:text-white uppercase">Navigate</h4>
+            <h4 className="font-display text-xl font-bold text-slate-900 dark:text-white uppercase">{t('footer.navigate')}</h4>
             <ul className="space-y-2 font-mono text-sm text-slate-600 dark:text-gray-400">
-                {['Home', 'Experience', 'Projects', 'Contact'].map((item) => (
-                    <li key={item}>
-                        <a href={`#${item.toLowerCase()}`} className="hover:text-sky-600 dark:hover:text-valorant-red transition-colors flex items-center gap-2">
-                            <span className="w-1 h-1 bg-slate-400 dark:bg-white/50" /> {item}
+                {[
+                  { label: t('nav.home'), href: 'home' },
+                  { label: t('nav.experience'), href: 'experience' },
+                  { label: t('nav.projects'), href: 'projects' },
+                  { label: t('nav.contact'), href: 'contact' },
+                ].map((item) => (
+                    <li key={item.href}>
+                        <a href={`#${item.href}`} className="hover:text-sky-600 dark:hover:text-valorant-red transition-colors flex items-center gap-2">
+                            <span className="w-1 h-1 bg-slate-400 dark:bg-white/50" /> {item.label}
                         </a>
                     </li>
                 ))}
@@ -54,19 +60,19 @@ const Footer = () => {
 
           {/* Status Column */}
           <div className="space-y-6">
-            <h4 className="font-display text-xl font-bold text-slate-900 dark:text-white uppercase">Status</h4>
+            <h4 className="font-display text-xl font-bold text-slate-900 dark:text-white uppercase">{t('footer.status')}</h4>
             <div className="space-y-4">
                 <div className="flex items-center gap-3 text-slate-600 dark:text-gray-400">
                     <ShieldCheck size={20} className="text-sky-600 dark:text-valorant-red" />
-                    <span className="font-mono text-xs uppercase">Open for Work</span>
+                    <span className="font-mono text-xs uppercase">{t('footer.openForWork')}</span>
                 </div>
                 <div className="flex items-center gap-3 text-slate-600 dark:text-gray-400">
                     <Terminal size={20} className="text-sky-600 dark:text-valorant-red" />
-                    <span className="font-mono text-xs uppercase">Building Solutions</span>
+                    <span className="font-mono text-xs uppercase">{t('footer.buildingSolutions')}</span>
                 </div>
                  <div className="flex items-center gap-3 text-slate-600 dark:text-gray-400">
                     <Globe size={20} className="text-sky-600 dark:text-valorant-red" />
-                    <span className="font-mono text-xs uppercase">Based in Vietnam</span>
+                    <span className="font-mono text-xs uppercase">{t('footer.basedIn')}</span>
                 </div>
             </div>
           </div>
@@ -75,14 +81,14 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-slate-300 dark:border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="font-mono text-xs text-slate-500 dark:text-gray-500 uppercase tracking-wider">
-            © 2026 Duc.DEV // All Rights Reserved
+            {t('footer.copyright')}
           </div>
           
           <button
             onClick={scrollToTop}
             className="group flex items-center gap-2 font-bold uppercase tracking-widest text-slate-900 dark:text-white hover:text-sky-600 dark:hover:text-valorant-red transition-colors"
           >
-            Back to Top <ArrowUp size={20} className="group-hover:-translate-y-1 transition-transform" />
+            {t('footer.backToTop')} <ArrowUp size={20} className="group-hover:-translate-y-1 transition-transform" />
           </button>
         </div>
       </div>

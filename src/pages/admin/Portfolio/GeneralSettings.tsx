@@ -1,12 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import PortfolioService from '../../../services/portfolio.service';
 import { Save } from 'lucide-react';
+import DualLanguageModal from '../../../components/admin/DualLanguageModal';
 
 const GeneralSettings = () => {
   const [settings, setSettings] = useState<{[key: string]: string}>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
+
+  // Helper to parse localized setting
+  const getLocalizedSetting = (key: string) => {
+      const val = settings[key];
+      if (!val) return { vi: '', en: '' };
+      try {
+          return JSON.parse(val);
+      } catch (e) {
+          return { vi: val, en: '' }; // Fallback
+      }
+  };
 
   useEffect(() => {
     loadSettings();
@@ -26,6 +38,12 @@ const GeneralSettings = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setSettings(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleLocalizedChange = (key: string, lang: 'vi' | 'en', val: string) => {
+      const current = getLocalizedSetting(key);
+      const updated = { ...current, [lang]: val };
+      setSettings(prev => ({ ...prev, [key]: JSON.stringify(updated) }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -53,7 +71,7 @@ const GeneralSettings = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto pb-20">
       <h1 className="text-2xl font-bold mb-6">General Settings</h1>
       
       {message && (
@@ -68,26 +86,48 @@ const GeneralSettings = () => {
         <section className="bg-white dark:bg-gray-800 p-6 rounded shadow">
           <h2 className="text-xl font-semibold mb-4 border-b pb-2">Hero Section</h2>
           <div className="grid gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Hero Title</label>
-              <input
-                type="text"
+             <DualLanguageModal.LocalizedInput
+                label="Hero Title"
                 name="hero_title"
-                value={settings.hero_title || ''}
-                onChange={handleChange}
-                className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Hero Subtitle</label>
-              <textarea
+                value={getLocalizedSetting('hero_title')}
+                onChange={(name, lang, val) => handleLocalizedChange(name, lang, val)}
+            />
+            <DualLanguageModal.LocalizedInput
+                label="Hero Subtitle"
                 name="hero_subtitle"
-                value={settings.hero_subtitle || ''}
-                onChange={handleChange}
-                rows={3}
-                className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-              />
-            </div>
+                value={getLocalizedSetting('hero_subtitle')}
+                onChange={(name, lang, val) => handleLocalizedChange(name, lang, val)}
+                type="textarea"
+            />
+          </div>
+        </section>
+
+         {/* Core Values Section */}
+         <section className="bg-white dark:bg-gray-800 p-6 rounded shadow">
+          <h2 className="text-xl font-semibold mb-4 border-b pb-2 flex justify-between items-center">
+              <span>Core Philosophy (Triết lý cốt lõi)</span>
+              <span className="text-xs font-normal text-gray-500">Displayed in Hero section boxes</span>
+          </h2>
+          <div className="grid gap-6">
+            {[1, 2, 3, 4].map(num => (
+                <div key={num} className="border p-4 rounded dark:border-gray-700">
+                    <h3 className="font-semibold mb-2">Value #{num}</h3>
+                    <div className="space-y-3">
+                        <DualLanguageModal.LocalizedInput
+                            label="Title"
+                            name={`core_value_${num}_title`}
+                            value={getLocalizedSetting(`core_value_${num}_title`)}
+                            onChange={(name, lang, val) => handleLocalizedChange(name, lang, val)}
+                        />
+                        <DualLanguageModal.LocalizedInput
+                            label="Description"
+                            name={`core_value_${num}_desc`}
+                            value={getLocalizedSetting(`core_value_${num}_desc`)}
+                            onChange={(name, lang, val) => handleLocalizedChange(name, lang, val)}
+                        />
+                    </div>
+                </div>
+            ))}
           </div>
         </section>
 
@@ -95,25 +135,37 @@ const GeneralSettings = () => {
         <section className="bg-white dark:bg-gray-800 p-6 rounded shadow">
           <h2 className="text-xl font-semibold mb-4 border-b pb-2">About Section</h2>
           <div className="grid gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Name</label>
-              <input
-                type="text"
+             <DualLanguageModal.LocalizedInput
+                label="Name"
                 name="about_name"
-                value={settings.about_name || ''}
-                onChange={handleChange}
-                className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Description</label>
-              <textarea
+                value={getLocalizedSetting('about_name')}
+                onChange={(name, lang, val) => handleLocalizedChange(name, lang, val)}
+            />
+             <DualLanguageModal.LocalizedInput
+                label="Description"
                 name="about_description"
-                value={settings.about_description || ''}
+                value={getLocalizedSetting('about_description')}
+                onChange={(name, lang, val) => handleLocalizedChange(name, lang, val)}
+                type="textarea"
+            />
+          </div>
+        </section>
+
+         {/* Additional Skills */}
+         <section className="bg-white dark:bg-gray-800 p-6 rounded shadow">
+          <h2 className="text-xl font-semibold mb-4 border-b pb-2">Additional Skills</h2>
+          <div className="grid gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Skills List (Comma separated)</label>
+              <textarea
+                name="additional_skills"
+                value={settings.additional_skills || ''}
                 onChange={handleChange}
                 rows={4}
                 className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
+                placeholder="Agile Methodology, Code Review, Team Leadership..."
               />
+              <p className="text-xs text-gray-500 mt-1">These will appear at the bottom of the Skills section.</p>
             </div>
           </div>
         </section>

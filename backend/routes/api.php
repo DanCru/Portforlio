@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\TranslationController;
 use App\Http\Controllers\Api\PortfolioController;
+use App\Http\Controllers\Api\ContactController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -26,8 +27,17 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('portfolio/{type}/{id}', [PortfolioController::class, 'update']);
         Route::delete('portfolio/{type}/{id}', [PortfolioController::class, 'destroy']);
         Route::post('portfolio/{type}/reorder', [PortfolioController::class, 'reorder']);
+
+        // Admin Contact Messages
+        Route::get('contacts', [ContactController::class, 'index']);
+        Route::get('contacts/{id}', [ContactController::class, 'show']);
+        Route::delete('contacts/{id}', [ContactController::class, 'destroy']);
     });
 });
 
 // Public Portfolio Routes
-Route::get('/portfolio', [PortfolioController::class, 'index']);
+Route::get('/portfolio', [PortfolioController::class, 'publicIndex']);
+Route::get('/portfolio/projects/{slug}', [PortfolioController::class, 'showProject']);
+
+// Public Contact Form
+Route::post('/contact', [ContactController::class, 'store']);

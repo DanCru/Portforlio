@@ -3,7 +3,7 @@ import axios from '../lib/axios';
 export type LocalizedString = string | { vi: string; en: string };
 
 export interface PortfolioSettings {
-  [key: string]: any; // Can be string or LocalizedString
+  [key: string]: any;
 }
 
 export interface Experience {
@@ -11,9 +11,9 @@ export interface Experience {
   position: LocalizedString;
   company: LocalizedString;
   location?: LocalizedString;
-  period: string; // usually date range, keep as string or make localized if needed
+  period: string;
   description?: LocalizedString;
-  achievements?: string[]; // Array of strings, maybe we need Array of LocalizedString later? For now keep simple
+  achievements?: string[];
   technologies?: string[];
   rank?: string;
   sort_order: number;
@@ -22,10 +22,9 @@ export interface Experience {
 
 export interface Skill {
   id: number;
-  name: string; // Tech names usually universal
+  name: string;
   category: LocalizedString;
-  proficiency: number;
-  icon?: string;
+  icon_url?: string;
   sort_order: number;
   is_active: boolean;
 }
@@ -56,6 +55,11 @@ export interface Project {
   metrics?: {[key: string]: string};
   duration?: string;
   team?: string;
+  role?: LocalizedString;
+  responsibilities?: LocalizedString;
+  gallery_images?: string[];
+  start_date?: string;
+  end_date?: string;
   status: string;
   live_url?: string;
   github_url?: string;
@@ -74,6 +78,16 @@ export interface Certification {
   is_active: boolean;
 }
 
+export interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  is_read: boolean;
+  created_at: string;
+}
+
 export interface PortfolioData {
   settings: PortfolioSettings;
   experiences: Experience[];
@@ -89,6 +103,11 @@ const PortfolioService = {
     return response.data;
   },
 
+  getProjectBySlug: async (slug: string) => {
+    const response = await axios.get(`/portfolio/projects/${slug}`);
+    return response.data;
+  },
+
   updateSettings: async (settings: {key: string, value: any}[]) => {
     const response = await axios.post('/admin/portfolio/settings', { settings });
     return response.data;
@@ -100,7 +119,6 @@ const PortfolioService = {
   },
 
   createItem: async (type: string, data: any) => {
-    // Check if data is FormData
     const isFormData = data instanceof FormData;
     const config = isFormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {};
     
@@ -109,13 +127,9 @@ const PortfolioService = {
   },
 
   updateItem: async (type: string, id: number, data: any) => {
-    // Check if data is FormData
     const isFormData = data instanceof FormData;
     const config = isFormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {};
 
-    // For PUT/PATCH with FormData in Laravel/PHP, method spoofing is often needed
-    // However, Axios usually handles PUT fine, but PHP sometimes struggles with multipart PUT.
-    // Safe bet: Use POST with _method=PUT if it's FormData
     if (isFormData) {
         data.append('_method', 'PUT');
         const response = await axios.post(`/admin/portfolio/${type}/${id}`, data, config);
@@ -134,7 +148,23 @@ const PortfolioService = {
   reorderItems: async (type: string, items: {id: number, sort_order: number}[]) => {
     const response = await axios.post(`/admin/portfolio/${type}/reorder`, { items });
     return response.data;
-  }
+  },
+
+  // Contact Messages
+  getContactMessages: async () => {
+    const response = await axios.get('/admin/contacts');
+    return response.data;
+  },
+
+  getContactMessage: async (id: number) => {
+    const response = await axios.get(`/admin/contacts/${id}`);
+    return response.data;
+  },
+
+  deleteContactMessage: async (id: number) => {
+    const response = await axios.delete(`/admin/contacts/${id}`);
+    return response.data;
+  },
 };
 
 export default PortfolioService;

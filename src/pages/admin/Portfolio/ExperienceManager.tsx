@@ -9,6 +9,9 @@ const ExperienceManager = () => {
   const [editingItem, setEditingItem] = useState<Partial<Experience> | null>(null);
   const [saving, setSaving] = useState(false);
 
+  const [techInput, setTechInput] = useState('');
+  const [achievementsInput, setAchievementsInput] = useState('');
+
   useEffect(() => {
     loadData();
   }, []);
@@ -26,15 +29,33 @@ const ExperienceManager = () => {
 
   const handleEdit = (item: Experience) => {
     // Ensure all translatable fields are objects
-    const normalize = (val: any) => typeof val === 'string' ? { vi: val, en: '' } : (val || { vi: '', en: '' });
+    const normalize = (val: any) => {
+        if (typeof val === 'string') {
+            try {
+                const parsed = JSON.parse(val);
+                return { vi: parsed.vi || '', en: parsed.en || '' };
+            } catch (e) {
+                return { vi: val, en: '' };
+            }
+        }
+        return val || { vi: '', en: '' };
+    };
     
+    // Parse arrays
+    const techs = typeof item.technologies === 'string' ? JSON.parse(item.technologies) : (item.technologies || []);
+    const achs = typeof item.achievements === 'string' ? JSON.parse(item.achievements) : (item.achievements || []);
+
     setEditingItem({
         ...item,
         position: normalize(item.position),
         company: normalize(item.company),
         location: normalize(item.location),
         description: normalize(item.description),
+        technologies: techs,
+        achievements: achs,
     });
+    setTechInput(Array.isArray(techs) ? techs.join(', ') : '');
+    setAchievementsInput(Array.isArray(achs) ? achs.join('\n') : '');
   };
 
   const handleCreate = () => {
@@ -50,6 +71,8 @@ const ExperienceManager = () => {
         sort_order: experiences.length + 1,
         is_active: true
     });
+    setTechInput('');
+    setAchievementsInput('');
   };
 
   const handeDelete = async (id: number) => {
@@ -67,16 +90,17 @@ const ExperienceManager = () => {
     setSaving(true);
 
     try {
-        // Prepare data for saving - basically JSON stringify the dual language objects
-        // But wait, our API now expects JSON objects for these fields, so we can send as is.
-        // However, we need to ensure we send the correct structure.
-        
+        const technologiesArray = techInput.split(',').map(s => s.trim()).filter(s => s);
+        const achievementsArray = achievementsInput.split('\n').map(s => s.trim()).filter(s => s);
+
         const payload = {
             ...editingItem,
             position: JSON.stringify(editingItem.position),
             company: JSON.stringify(editingItem.company),
             location: JSON.stringify(editingItem.location),
             description: JSON.stringify(editingItem.description),
+            technologies: JSON.stringify(technologiesArray),
+            achievements: JSON.stringify(achievementsArray),
         };
 
         if (editingItem.id) {
@@ -101,6 +125,8 @@ const ExperienceManager = () => {
           [field]: { ...((prev as any)[field] || { vi: '', en: '' }), [lang]: value }
       }));
   };
+
+  // Removed handleArrayTextChange as we use simple state now
 
   if (loading) return <div>Loading...</div>;
 
@@ -173,7 +199,26 @@ const ExperienceManager = () => {
                     type="textarea"
                 />
 
-                {/* Achievements and Technologies could be handled here too if needed, but keeping simple for now */}
+                <div>
+                    <label className="block text-sm font-medium mb-1">Technologies (comma separated)</label>
+                    <input 
+                        value={techInput}
+                        onChange={e => setTechInput(e.target.value)}
+                        className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
+                        placeholder="React, Laravel, Docker..."
+                    />
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium mb-1">Key Achievements (one per line)</label>
+                    <textarea 
+                        value={achievementsInput}
+                        onChange={e => setAchievementsInput(e.target.value)}
+                        className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
+                        placeholder="Optimized database queries&#10;Led team of 5 developers..."
+                        rows={4}
+                    />
+                </div>
             </div>
         )}
       </DualLanguageModal>
@@ -181,13 +226,16 @@ const ExperienceManager = () => {
       <div className="grid gap-4">
         {experiences.map(item => {
             // Helper to get display text
-            const getVal = (val: any) => typeof val === 'string' ? val : (val?.vi || val?.en || '');
+            const getVal = (val: any) => typeof val === 'string' ? { vi: '', en: '' } : (val || { vi: '', en: '' });
+            const getStr = (val: any) => val?.vi || val?.en || '';
+            const pos = getVal(item.position);
+            const comp = getVal(item.company);
             
             return (
                 <div key={item.id} className="bg-white dark:bg-gray-800 p-4 rounded shadow flex justify-between items-center group">
                     <div>
-                        <h3 className="font-bold text-lg">{getVal(item.position)} <span className="text-sm font-normal text-gray-500">at {getVal(item.company)}</span></h3>
-                        <p className="text-sm text-gray-500">{item.period} | {getVal(item.location)}</p>
+                        <h3 className="font-bold text-lg">{getStr(pos)} <span className="text-sm font-normal text-gray-500">at {getStr(comp)}</span></h3>
+                        <p className="text-sm text-gray-500">{item.period} | {getStr(getVal(item.location))}</p>
                     </div>
                     <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button onClick={() => handleEdit(item)} className="p-2 text-blue-600 hover:bg-blue-50 rounded"><Edit size={18} /></button>
