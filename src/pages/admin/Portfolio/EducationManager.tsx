@@ -182,7 +182,7 @@ const EducationManager = () => {
       <div className="grid gap-4">
         {items.map(item => {
              const getVal = (val: any) => typeof val === 'string' ? val : (val?.vi || val?.en || '');
-             const imageUrl = item.image?.startsWith('http') || item.image?.startsWith('/') ? item.image : `http://localhost:8000${item.image}`;
+             const imageUrl = item.image?.startsWith('http') || item.image?.startsWith('/') ? item.image : `http://localhost:7745${item.image}`;
 
              return (
                 <div key={item.id} className="bg-white dark:bg-gray-800 p-4 rounded shadow flex justify-between items-center group">

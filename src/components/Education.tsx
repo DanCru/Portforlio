@@ -41,7 +41,7 @@ const Education = () => {
             {education.map((edu, index) => (
                 <div key={index} className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 p-1 group hover:border-sky-500 dark:hover:border-valorant-red/50 transition-colors overflow-hidden shadow-lg dark:shadow-none">
                     <div className="relative h-48 overflow-hidden mb-4">
-                        {edu.image && <img src={edu.image.startsWith('http') ? edu.image : `http://localhost:8000${edu.image}`} alt={getLocalized(edu.school, language)} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter dark:grayscale dark:group-hover:grayscale-0" />}
+                        {edu.image && <img src={edu.image.startsWith('http') ? edu.image : `http://localhost:7745${edu.image}`} alt={getLocalized(edu.school, language)} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter dark:grayscale dark:group-hover:grayscale-0" />}
                         <div className="absolute inset-0 bg-transparent dark:bg-black/50 group-hover:bg-transparent transition-colors duration-300" />
                         <div className="absolute bottom-0 left-0 bg-sky-500 dark:bg-valorant-red text-white text-xs font-bold px-3 py-1 uppercase tracking-wider">
                             {edu.period}

@@ -21,7 +21,7 @@ const Translations = () => {
     const fetchTranslations = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:8000/api/translations', {
+            const res = await axios.get('http://localhost:7745/api/translations', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setTranslations(res.data);
@@ -35,7 +35,7 @@ const Translations = () => {
     const handleAdd = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.post('http://localhost:8000/api/translations', newItem, {
+            const res = await axios.post('http://localhost:7745/api/translations', newItem, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setTranslations([...translations, res.data]);
@@ -49,7 +49,7 @@ const Translations = () => {
         if (!confirm('Are you sure?')) return;
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:8000/api/translations/${id}`, {
+            await axios.delete(`http://localhost:7745/api/translations/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setTranslations(translations.filter(t => t.id !== id));

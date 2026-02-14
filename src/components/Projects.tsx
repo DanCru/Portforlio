@@ -43,7 +43,7 @@ const Projects = () => {
                 <div className="h-full bg-white dark:bg-valorant-dark relative clip-path-slant-right overflow-hidden border border-slate-200 dark:border-white/10 group-hover:border-sky-500 dark:group-hover:border-valorant-red/50 transition-colors shadow-xl dark:shadow-none">
                     {project.image && (
                         <img 
-                            src={project.image.startsWith('http') ? project.image : `http://localhost:8000${project.image}`}
+                            src={project.image.startsWith('http') ? project.image : `http://localhost:7745${project.image}`}
                             alt={getLocalized(project.title, language)}
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter brightness-95 dark:brightness-75 group-hover:brightness-100"
                         />

@@ -4,7 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Admin\TranslationController;
+use App\Http\Controllers\Api\TranslationController;
+use App\Http\Controllers\Api\PortfolioController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -17,16 +18,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('translations', TranslationController::class);
 
         // Portfolio Admin Routes
-        Route::post('portfolio/settings', [App\Http\Controllers\Api\Admin\PortfolioController::class, 'updateSettings']);
+        Route::post('portfolio/settings', [PortfolioController::class, 'updateSettings']);
         
         // Polymorphic-style resources for portfolio items
-        Route::get('portfolio/{type}', [App\Http\Controllers\Api\Admin\PortfolioController::class, 'index']);
-        Route::post('portfolio/{type}', [App\Http\Controllers\Api\Admin\PortfolioController::class, 'store']);
-        Route::put('portfolio/{type}/{id}', [App\Http\Controllers\Api\Admin\PortfolioController::class, 'update']);
-        Route::delete('portfolio/{type}/{id}', [App\Http\Controllers\Api\Admin\PortfolioController::class, 'destroy']);
-        Route::post('portfolio/{type}/reorder', [App\Http\Controllers\Api\Admin\PortfolioController::class, 'reorder']);
+        Route::get('portfolio/{type}', [PortfolioController::class, 'index']);
+        Route::post('portfolio/{type}', [PortfolioController::class, 'store']);
+        Route::put('portfolio/{type}/{id}', [PortfolioController::class, 'update']);
+        Route::delete('portfolio/{type}/{id}', [PortfolioController::class, 'destroy']);
+        Route::post('portfolio/{type}/reorder', [PortfolioController::class, 'reorder']);
     });
 });
 
 // Public Portfolio Routes
-Route::get('/portfolio', [App\Http\Controllers\Api\PortfolioController::class, 'index']);
+Route::get('/portfolio', [PortfolioController::class, 'index']);
